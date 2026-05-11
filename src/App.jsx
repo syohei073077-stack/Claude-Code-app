@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { differenceInDays, parseISO } from 'date-fns'
-import { Plus, Bell, BellOff } from 'lucide-react'
+import { Plus, Bell, BellOff, Thermometer, Droplets, RefreshCw } from 'lucide-react'
 import { useRackets } from './hooks/useRackets'
 import { useNotifications } from './hooks/useNotifications'
+import { useOkinawaWeather } from './hooks/useOkinawaWeather'
 import RacketCard from './components/RacketCard'
 import RacketForm from './components/RacketForm'
 import NotificationBanner from './components/NotificationBanner'
@@ -10,6 +11,7 @@ import NotificationBanner from './components/NotificationBanner'
 export default function App() {
   const { rackets, addRacket, updateRacket, deleteRacket } = useRackets()
   const { permission, requestPermission, checkAndNotify } = useNotifications(rackets)
+  const { weather, loading: weatherLoading, error: weatherError, updatedAt, refetch } = useOkinawaWeather()
   const [showForm, setShowForm] = useState(false)
   const [editTarget, setEditTarget] = useState(null)
 
@@ -47,7 +49,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-2xl mx-auto px-4 py-8">
-        <header className="mb-8">
+        <header className="mb-6">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-3">
               <span className="text-3xl">🏸</span>
@@ -79,7 +81,10 @@ export default function App() {
           <p className="text-sm text-gray-500 ml-12">バドミントンストリングのテンション・交換時期を管理</p>
         </header>
 
-        <div className="mb-6">
+        {/* Okinawa weather strip */}
+        <WeatherStrip weather={weather} loading={weatherLoading} error={weatherError} updatedAt={updatedAt} onRefresh={refetch} />
+
+        <div className="mb-6 mt-4">
           <NotificationBanner permission={permission} onRequest={requestPermission} />
         </div>
 
@@ -99,6 +104,7 @@ export default function App() {
               <RacketCard
                 key={racket.id}
                 racket={racket}
+                weather={weather}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
               />
@@ -114,6 +120,42 @@ export default function App() {
           onCancel={handleCancel}
         />
       )}
+    </div>
+  )
+}
+
+function WeatherStrip({ weather, loading, error, updatedAt, onRefresh }) {
+  const timeStr = updatedAt
+    ? updatedAt.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })
+    : null
+
+  return (
+    <div className="bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl px-5 py-3 flex items-center justify-between text-white shadow-sm">
+      <div className="flex items-center gap-4">
+        <span className="text-lg font-semibold">🌺 沖縄 現在の気象</span>
+        {loading ? (
+          <span className="text-sm text-sky-200">取得中...</span>
+        ) : weather ? (
+          <div className="flex items-center gap-4 text-sm">
+            <span className="flex items-center gap-1.5">
+              <Thermometer size={15} className="text-sky-200" />
+              <span className="font-bold text-lg">{weather.temperature}°C</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Droplets size={15} className="text-sky-200" />
+              <span className="font-bold text-lg">{weather.humidity}%</span>
+            </span>
+          </div>
+        ) : (
+          <span className="text-sm text-sky-200">{error ? '取得失敗（月平均値を使用中）' : '—'}</span>
+        )}
+      </div>
+      <div className="flex items-center gap-2 text-sky-200 text-xs">
+        {timeStr && <span>更新: {timeStr}</span>}
+        <button onClick={onRefresh} className="hover:text-white transition-colors" title="更新">
+          <RefreshCw size={14} />
+        </button>
+      </div>
     </div>
   )
 }

@@ -1,7 +1,8 @@
 import { format, parseISO } from 'date-fns'
 import { ja } from 'date-fns/locale'
-import { Pencil, Trash2, Bell, BellOff } from 'lucide-react'
-import { calcCurrentTension, getDaysStatus, getStatusLevel } from '../utils/tension'
+import { Pencil, Trash2, ChevronDown, ChevronUp } from 'lucide-react'
+import { useState } from 'react'
+import { calcCurrentTension, getTensionBreakdown, getDaysStatus, getStatusLevel } from '../utils/tension'
 
 const STATUS_STYLES = {
   overdue: { bar: 'bg-red-500', badge: 'bg-red-100 text-red-700 border-red-200', label: '交換超過', card: 'border-red-300' },
@@ -11,14 +12,24 @@ const STATUS_STYLES = {
   unknown: { bar: 'bg-gray-300', badge: 'bg-gray-100 text-gray-600 border-gray-200', label: '未設定', card: 'border-gray-200' },
 }
 
-export default function RacketCard({ racket, onEdit, onDelete }) {
-  const currentTension = calcCurrentTension(racket.tension, racket.stringDate)
+export default function RacketCard({ racket, onEdit, onDelete, weather }) {
+  const [showDetail, setShowDetail] = useState(false)
+
+  const temp = weather?.temperature ?? null
+  const humid = weather?.humidity ?? null
+
+  const currentTension = calcCurrentTension(racket.tension, racket.stringDate, temp, humid)
+  const breakdown = getTensionBreakdown(racket.tension, racket.stringDate, temp, humid)
   const status = getDaysStatus(racket.stringDate, racket.replacementDays)
   const level = getStatusLevel(status?.remaining ?? null)
   const style = STATUS_STYLES[level]
   const progress = status && racket.replacementDays
     ? Math.min((status.elapsed / racket.replacementDays) * 100, 100)
     : 0
+
+  const tensionLoss = racket.tension && currentTension
+    ? Math.round((racket.tension - currentTension) * 10) / 10
+    : null
 
   return (
     <div className={`bg-white rounded-2xl border-2 ${style.card} shadow-sm hover:shadow-md transition-shadow p-5 flex flex-col gap-4`}>
@@ -38,6 +49,7 @@ export default function RacketCard({ racket, onEdit, onDelete }) {
         <InfoItem
           label="現在のテンション"
           value={currentTension ? `${currentTension} lbs` : '—'}
+          sub={tensionLoss ? `−${tensionLoss} lbs` : null}
           highlight
         />
         <InfoItem
@@ -59,6 +71,57 @@ export default function RacketCard({ racket, onEdit, onDelete }) {
               style={{ width: `${progress}%` }}
             />
           </div>
+        </div>
+      )}
+
+      {/* Okinawa weather & tension breakdown */}
+      {breakdown && (
+        <div>
+          <button
+            onClick={() => setShowDetail(v => !v)}
+            className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            {showDetail ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+            沖縄気象による補正内訳
+          </button>
+          {showDetail && (
+            <div className="mt-2 bg-sky-50 rounded-xl px-4 py-3 text-xs text-gray-600 flex flex-col gap-1.5">
+              <WeatherRow
+                icon="🌡️"
+                label={`現在の気温 (沖縄)`}
+                value={temp !== null ? `${temp}°C` : '—'}
+              />
+              <WeatherRow
+                icon="💧"
+                label={`現在の湿度 (沖縄)`}
+                value={humid !== null ? `${humid}%` : '—'}
+              />
+              <div className="border-t border-sky-200 my-1" />
+              <WeatherRow
+                icon="📅"
+                label={`張り日からの平均気温`}
+                value={`${breakdown.avgTemp}°C`}
+              />
+              <WeatherRow
+                icon="🌊"
+                label={`張り日からの平均湿度`}
+                value={`${breakdown.avgHumid}%`}
+              />
+              <div className="border-t border-sky-200 my-1" />
+              <WeatherRow
+                icon="🔥"
+                label="気温によるテンション低下"
+                value={`${breakdown.tempLoss} lbs`}
+                warn
+              />
+              <WeatherRow
+                icon="💦"
+                label="湿度によるテンション低下"
+                value={`${breakdown.humidLoss} lbs`}
+                warn
+              />
+            </div>
+          )}
         </div>
       )}
 
@@ -84,13 +147,23 @@ export default function RacketCard({ racket, onEdit, onDelete }) {
   )
 }
 
-function InfoItem({ label, value, highlight, warn }) {
+function InfoItem({ label, value, highlight, warn, sub }) {
   return (
     <div className="bg-gray-50 rounded-xl px-3 py-2">
       <p className="text-xs text-gray-400 mb-0.5">{label}</p>
       <p className={`font-semibold ${highlight ? 'text-blue-600' : warn ? 'text-red-600' : 'text-gray-800'}`}>
         {value}
       </p>
+      {sub && <p className="text-xs text-red-400">{sub}</p>}
+    </div>
+  )
+}
+
+function WeatherRow({ icon, label, value, warn }) {
+  return (
+    <div className="flex justify-between items-center">
+      <span className="flex items-center gap-1.5 text-gray-500">{icon} {label}</span>
+      <span className={`font-medium ${warn ? 'text-red-500' : 'text-sky-700'}`}>{value}</span>
     </div>
   )
 }
