@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { differenceInDays, parseISO } from 'date-fns'
-import { Plus, Bell, BellOff, Thermometer, Droplets, RefreshCw } from 'lucide-react'
+import { Plus, Bell, BellOff, Thermometer, Droplets, RefreshCw, HelpCircle } from 'lucide-react'
 import { useRackets } from './hooks/useRackets'
 import { useNotifications } from './hooks/useNotifications'
 import { useOkinawaWeather } from './hooks/useOkinawaWeather'
 import RacketCard from './components/RacketCard'
 import RacketForm from './components/RacketForm'
 import NotificationBanner from './components/NotificationBanner'
+import HelpModal from './components/HelpModal'
 
 export default function App() {
   const { rackets, addRacket, updateRacket, deleteRacket } = useRackets()
@@ -14,6 +15,7 @@ export default function App() {
   const { weather, loading: weatherLoading, error: weatherError, updatedAt, refetch } = useOkinawaWeather()
   const [showForm, setShowForm] = useState(false)
   const [editTarget, setEditTarget] = useState(null)
+  const [showHelp, setShowHelp] = useState(false)
 
   function handleSave(data) {
     if (editTarget) {
@@ -56,6 +58,13 @@ export default function App() {
               <h1 className="text-2xl font-bold text-gray-900">ストリング管理</h1>
             </div>
             <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowHelp(true)}
+                title="計算モデルについて"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
+              >
+                <HelpCircle size={20} />
+              </button>
               {permission === 'granted' && (
                 <button
                   onClick={checkAndNotify}
@@ -120,6 +129,7 @@ export default function App() {
           onCancel={handleCancel}
         />
       )}
+      {showHelp && <HelpModal onClose={() => setShowHelp(false)} />}
     </div>
   )
 }
