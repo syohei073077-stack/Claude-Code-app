@@ -140,28 +140,28 @@ function WeatherStrip({ weather, loading, error, updatedAt, onRefresh }) {
     : null
 
   return (
-    <div className="bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl px-5 py-3 flex items-center justify-between text-white shadow-sm">
-      <div className="flex items-center gap-4">
-        <span className="text-lg font-semibold">🌺 沖縄 現在の気象</span>
+    <div className="bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl px-5 py-3 flex items-center justify-between text-white shadow-sm gap-2">
+      <div className="flex flex-col gap-1 min-w-0">
+        <span className="text-xs font-medium text-sky-200 whitespace-nowrap">🌺 沖縄 現在の気象</span>
         {loading ? (
-          <span className="text-sm text-sky-200">取得中...</span>
+          <span className="text-sm text-sky-100">取得中...</span>
         ) : weather ? (
-          <div className="flex items-center gap-4 text-sm">
+          <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5">
               <Thermometer size={15} className="text-sky-200" />
-              <span className="font-bold text-lg">{weather.temperature}°C</span>
+              <span className="font-bold text-xl">{weather.temperature}°C</span>
             </span>
             <span className="flex items-center gap-1.5">
               <Droplets size={15} className="text-sky-200" />
-              <span className="font-bold text-lg">{weather.humidity}%</span>
+              <span className="font-bold text-xl">{weather.humidity}%</span>
             </span>
           </div>
         ) : (
           <span className="text-sm text-sky-200">{error ? '取得失敗（月平均値を使用中）' : '—'}</span>
         )}
       </div>
-      <div className="flex items-center gap-2 text-sky-200 text-xs">
-        {timeStr && <span>更新: {timeStr}</span>}
+      <div className="flex items-center gap-2 text-sky-200 text-xs shrink-0">
+        {timeStr && <span className="whitespace-nowrap">更新: {timeStr}</span>}
         <button onClick={onRefresh} className="hover:text-white transition-colors" title="更新">
           <RefreshCw size={14} />
         </button>
