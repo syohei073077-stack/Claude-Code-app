@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+@layer components {
+  .input {
+    @apply w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all bg-gray-50;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 text-white font-medium text-sm px-4 py-2.5 rounded-xl hover:bg-blue-700 transition-colors;
+  }
+
+  .btn-secondary {
+    @apply border border-gray-200 text-gray-600 font-medium text-sm px-4 py-2.5 rounded-xl hover:bg-gray-50 transition-colors;
+  }
+}

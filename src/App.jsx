@@ -1,0 +1,146 @@
+import { useState } from 'react'
+import { differenceInDays, parseISO } from 'date-fns'
+import { Plus, Bell, BellOff } from 'lucide-react'
+import { useRackets } from './hooks/useRackets'
+import { useNotifications } from './hooks/useNotifications'
+import RacketCard from './components/RacketCard'
+import RacketForm from './components/RacketForm'
+import NotificationBanner from './components/NotificationBanner'
+
+export default function App() {
+  const { rackets, addRacket, updateRacket, deleteRacket } = useRackets()
+  const { permission, requestPermission, checkAndNotify } = useNotifications(rackets)
+  const [showForm, setShowForm] = useState(false)
+  const [editTarget, setEditTarget] = useState(null)
+
+  function handleSave(data) {
+    if (editTarget) {
+      updateRacket(editTarget.id, data)
+    } else {
+      addRacket(data)
+    }
+    setShowForm(false)
+    setEditTarget(null)
+  }
+
+  function handleEdit(racket) {
+    setEditTarget(racket)
+    setShowForm(true)
+  }
+
+  function handleDelete(id) {
+    if (window.confirm('このラケットを削除しますか？')) {
+      deleteRacket(id)
+    }
+  }
+
+  function handleCancel() {
+    setShowForm(false)
+    setEditTarget(null)
+  }
+
+  const overdueCount = rackets.filter(r => {
+    if (!r.stringDate || !r.replacementDays) return false
+    return differenceInDays(new Date(), parseISO(r.stringDate)) >= r.replacementDays
+  }).length
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <header className="mb-8">
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">🏸</span>
+              <h1 className="text-2xl font-bold text-gray-900">ストリング管理</h1>
+            </div>
+            <div className="flex items-center gap-2">
+              {permission === 'granted' && (
+                <button
+                  onClick={checkAndNotify}
+                  title="通知を今すぐチェック"
+                  className="p-2 text-blue-500 hover:bg-blue-50 rounded-xl transition-colors"
+                >
+                  <Bell size={20} />
+                </button>
+              )}
+              {permission === 'denied' && (
+                <span title="通知がブロックされています" className="p-2 text-gray-400">
+                  <BellOff size={20} />
+                </span>
+              )}
+              <button
+                onClick={() => setShowForm(true)}
+                className="flex items-center gap-2 bg-blue-600 text-white text-sm font-medium px-4 py-2.5 rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
+              >
+                <Plus size={18} /> ラケット追加
+              </button>
+            </div>
+          </div>
+          <p className="text-sm text-gray-500 ml-12">バドミントンストリングのテンション・交換時期を管理</p>
+        </header>
+
+        <div className="mb-6">
+          <NotificationBanner permission={permission} onRequest={requestPermission} />
+        </div>
+
+        {rackets.length > 0 && (
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            <StatCard label="ラケット数" value={rackets.length} />
+            <StatCard label="交換超過" value={overdueCount} warn={overdueCount > 0} />
+            <StatCard label="通知" value={permission === 'granted' ? 'ON' : 'OFF'} />
+          </div>
+        )}
+
+        {rackets.length === 0 ? (
+          <EmptyState onAdd={() => setShowForm(true)} />
+        ) : (
+          <div className="flex flex-col gap-4">
+            {rackets.map(racket => (
+              <RacketCard
+                key={racket.id}
+                racket={racket}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {showForm && (
+        <RacketForm
+          initial={editTarget}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
+      )}
+    </div>
+  )
+}
+
+function StatCard({ label, value, warn }) {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-4 py-3 text-center">
+      <p className="text-xs text-gray-400 mb-1">{label}</p>
+      <p className={`text-xl font-bold ${warn ? 'text-red-500' : 'text-gray-800'}`}>{value}</p>
+    </div>
+  )
+}
+
+function EmptyState({ onAdd }) {
+  return (
+    <div className="text-center py-16 flex flex-col items-center gap-4">
+      <span className="text-6xl">🏸</span>
+      <div>
+        <p className="text-lg font-medium text-gray-700">ラケットがまだありません</p>
+        <p className="text-sm text-gray-400 mt-1">最初のラケットを追加してストリング管理を始めましょう</p>
+      </div>
+      <button
+        onClick={onAdd}
+        className="flex items-center gap-2 bg-blue-600 text-white text-sm font-medium px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
+      >
+        <Plus size={18} /> ラケットを追加する
+      </button>
+    </div>
+  )
+}
