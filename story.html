@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Story</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1920px;
+    font-family: 'Helvetica Neue', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', Arial, sans-serif;
+    background: linear-gradient(160deg, #0f172a 0%, #1e3a8a 45%, #1d4ed8 100%);
+    color: white;
+    overflow: hidden;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+    padding: 80px 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  /* ── ヘッダー ── */
+  .hero {
+    text-align: center;
+  }
+  .hero .emoji { font-size: 100px; line-height: 1; }
+  .hero h1 {
+    font-size: 68px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin-top: 20px;
+    line-height: 1.1;
+  }
+  .hero .sub {
+    font-size: 32px;
+    color: #93c5fd;
+    margin-top: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── URL カード ── */
+  .url-card {
+    background: white;
+    border-radius: 32px;
+    padding: 36px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .url-card .label { font-size: 26px; color: #64748b; font-weight: 600; }
+  .url-card .url { font-size: 30px; color: #2563eb; font-weight: 800; word-break: break-all; }
+  .url-card .free-badge {
+    background: #dcfce7;
+    color: #166534;
+    font-size: 26px;
+    font-weight: 800;
+    padding: 12px 28px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  /* ── エビデンス ── */
+  .evidence {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.25);
+    border-radius: 32px;
+    padding: 44px 48px;
+    backdrop-filter: blur(8px);
+  }
+  .evidence .ev-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fde68a;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ev-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .ev-item {
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 24px 28px;
+  }
+  .ev-item .ev-num {
+    font-size: 50px;
+    font-weight: 900;
+    color: #fbbf24;
+    line-height: 1;
+  }
+  .ev-item .ev-unit { font-size: 26px; font-weight: 700; color: #fbbf24; }
+  .ev-item .ev-desc {
+    font-size: 24px;
+    color: #e2e8f0;
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* ── 機能リスト ── */
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .feature-item {
+    background: rgba(255,255,255,0.08);
+    border-left: 6px solid #60a5fa;
+    border-radius: 0 20px 20px 0;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .feature-item .fi-icon { font-size: 44px; flex-shrink: 0; }
+  .feature-item .fi-text { font-size: 30px; font-weight: 700; line-height: 1.3; }
+  .feature-item .fi-sub { font-size: 24px; color: #93c5fd; margin-top: 4px; font-weight: 400; }
+
+  /* ── 使い方 ── */
+  .steps {
+    background: rgba(255,255,255,0.08);
+    border-radius: 32px;
+    padding: 40px 48px;
+  }
+  .steps h2 {
+    font-size: 34px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    color: #bfdbfe;
+  }
+  .step-list { display: flex; flex-direction: column; gap: 16px; }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .step-num {
+    width: 54px; height: 54px;
+    background: #2563eb;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 900;
+    flex-shrink: 0;
+  }
+  .step-text { font-size: 28px; font-weight: 600; line-height: 1.3; }
+
+  /* ── フッター ── */
+  .footer {
+    background: rgba(255,255,255,0.12);
+    border-radius: 28px;
+    padding: 32px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .footer .f-left { }
+  .footer .f-label { font-size: 26px; color: #93c5fd; font-weight: 600; }
+  .footer .f-step { font-size: 27px; font-weight: 700; margin-top: 4px; }
+  .footer .f-badge {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 20px;
+    padding: 16px 28px;
+    font-size: 26px;
+    font-weight: 800;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヘッダー -->
+  <div class="hero">
+    <div class="emoji">🏸</div>
+    <h1>バドミントン<br>ストリング管理</h1>
+    <div class="sub">テンション劣化を科学的に見える化</div>
+  </div>
+
+  <!-- URL -->
+  <div class="url-card">
+    <div>
+      <div class="label">📲 無料で今すぐ使える</div>
+      <div class="url">claude-code-app-tawny.vercel.app</div>
+    </div>
+    <div class="free-badge">完全<br>無料</div>
+  </div>
+
+  <!-- エビデンス -->
+  <div class="evidence">
+    <div class="ev-title">📊 知ってた？ストリングは確実に落ちる</div>
+    <div class="ev-grid">
+      <div class="ev-item">
+        <div class="ev-num">−5<span class="ev-unit">%</span></div>
+        <div class="ev-desc">張り直後7日間で<br>初期テンションが低下</div>
+      </div>
+      <div class="ev-item">
+        <div class="ev-num">−3<span class="ev-unit">%</span></div>
+        <div class="ev-desc">その後も30日ごとに<br>じわじわ低下</div>
+      </div>
+      <div class="ev-item">
+        <div class="ev-num">−1.0<span class="ev-unit">lbs</span></div>
+        <div class="ev-desc">沖縄の夏（30°C）の<br>高温による追加低下</div>
+      </div>
+      <div class="ev-item">
+        <div class="ev-num">−0.7<span class="ev-unit">lbs</span></div>
+        <div class="ev-desc">梅雨〜夏の高湿度（80%）<br>による追加低下</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 機能 -->
+  <div class="features">
+    <div class="feature-item">
+      <div class="fi-icon">🧮</div>
+      <div>
+        <div class="fi-text">現在のテンションを自動計算</div>
+        <div class="fi-sub">時間・気温・湿度・練習頻度を考慮</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-icon">🌺</div>
+      <div>
+        <div class="fi-text">沖縄の気象データを自動取得</div>
+        <div class="fi-sub">Open-Meteo API でリアルタイム反映</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="fi-icon">🔔</div>
+      <div>
+        <div class="fi-text">交換時期をプッシュ通知</div>
+        <div class="fi-sub">超過・まもなく・良好 でステータス管理</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 使い方 -->
+  <div class="steps">
+    <h2>📖 使い方（30秒で登録完了）</h2>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">ブランド・ラケット名をプルダウンで選択</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">ストリング・張った日・練習頻度を入力</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">現在のテンションが自動で計算される！</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <div class="footer">
+    <div class="f-left">
+      <div class="f-label">📱 ホーム画面に追加する方法</div>
+      <div class="f-step">iPhone: Safari → 共有 → ホーム画面に追加</div>
+      <div class="f-step">Android: Chrome → メニュー → インストール</div>
+    </div>
+    <div class="f-badge">アプリ感覚<br>で使える！</div>
+  </div>
+
+</div>
+</body>
+</html>
