@@ -52,42 +52,42 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-2xl mx-auto px-4 py-8">
         <header className="mb-6">
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-3">
-              <span className="text-3xl">🏸</span>
-              <h1 className="text-2xl font-bold text-gray-900">ストリング管理</h1>
+          <div className="flex items-center justify-between mb-1 gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-2xl shrink-0">🏸</span>
+              <h1 className="text-xl font-bold text-gray-900 whitespace-nowrap">ストリング管理</h1>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 shrink-0">
               <button
                 onClick={() => setShowHelp(true)}
                 title="計算モデルについて"
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
+                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
               >
-                <HelpCircle size={20} />
+                <HelpCircle size={18} />
               </button>
               {permission === 'granted' && (
                 <button
                   onClick={checkAndNotify}
                   title="通知を今すぐチェック"
-                  className="p-2 text-blue-500 hover:bg-blue-50 rounded-xl transition-colors"
+                  className="p-1.5 text-blue-500 hover:bg-blue-50 rounded-xl transition-colors"
                 >
-                  <Bell size={20} />
+                  <Bell size={18} />
                 </button>
               )}
               {permission === 'denied' && (
-                <span title="通知がブロックされています" className="p-2 text-gray-400">
-                  <BellOff size={20} />
+                <span title="通知がブロックされています" className="p-1.5 text-gray-400">
+                  <BellOff size={18} />
                 </span>
               )}
               <button
                 onClick={() => setShowForm(true)}
-                className="flex items-center gap-2 bg-blue-600 text-white text-sm font-medium px-4 py-2.5 rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
+                className="flex items-center gap-1.5 bg-blue-600 text-white text-sm font-medium px-3 py-2 rounded-xl hover:bg-blue-700 transition-colors shadow-sm whitespace-nowrap"
               >
-                <Plus size={18} /> ラケット追加
+                <Plus size={16} /> ラケット追加
               </button>
             </div>
           </div>
-          <p className="text-sm text-gray-500 ml-12">バドミントンストリングのテンション・交換時期を管理</p>
+          <p className="text-xs text-gray-500 ml-9">バドミントンストリングのテンション・交換時期を管理</p>
         </header>
 
         {/* Okinawa weather strip */}
