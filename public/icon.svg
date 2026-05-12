@@ -1,4 +1,79 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="112" fill="#2563eb"/>
-  <text x="256" y="340" font-size="300" text-anchor="middle" font-family="Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji,sans-serif">🏸</text>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#fde8f5"/>
+      <stop offset="100%" stop-color="#c4e0ff"/>
+    </radialGradient>
+    <linearGradient id="frame-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9ec7"/>
+      <stop offset="100%" stop-color="#ffb347"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="512" height="512" rx="110" fill="url(#bg)"/>
+
+  <!-- ラケット（中央やや左下、少し回転） -->
+  <g transform="translate(235,275) rotate(-40)">
+    <!-- グリップ -->
+    <rect x="-13" y="110" width="26" height="100" rx="13" fill="#a0522d"/>
+    <rect x="-12" y="114" width="24" height="9" rx="5" fill="#7a3b1e" opacity="0.5"/>
+    <rect x="-12" y="129" width="24" height="9" rx="5" fill="#7a3b1e" opacity="0.5"/>
+    <rect x="-12" y="144" width="24" height="9" rx="5" fill="#7a3b1e" opacity="0.5"/>
+    <rect x="-12" y="159" width="24" height="9" rx="5" fill="#7a3b1e" opacity="0.5"/>
+    <rect x="-12" y="174" width="24" height="9" rx="5" fill="#7a3b1e" opacity="0.5"/>
+
+    <!-- シャフト -->
+    <rect x="-8" y="58" width="16" height="58" rx="8" fill="#e0a84a"/>
+
+    <!-- フレーム下塗り -->
+    <ellipse cx="0" cy="0" rx="80" ry="95" fill="url(#frame-grad)"/>
+
+    <!-- ストリング横 -->
+    <line x1="-72" y1="-56" x2="72" y2="-56" stroke="white" stroke-width="2.8" opacity="0.9" clip-path="url(#frame-clip)"/>
+    <line x1="-76" y1="-38" x2="76" y2="-38" stroke="white" stroke-width="2.8" opacity="0.9"/>
+    <line x1="-79" y1="-19" x2="79" y2="-19" stroke="white" stroke-width="2.8" opacity="0.9"/>
+    <line x1="-80" y1="0"   x2="80" y2="0"   stroke="white" stroke-width="2.8" opacity="0.9"/>
+    <line x1="-79" y1="19"  x2="79" y2="19"  stroke="white" stroke-width="2.8" opacity="0.9"/>
+    <line x1="-76" y1="38"  x2="76" y2="38"  stroke="white" stroke-width="2.8" opacity="0.9"/>
+    <line x1="-72" y1="56"  x2="72" y2="56"  stroke="white" stroke-width="2.8" opacity="0.9"/>
+
+    <!-- ストリング縦 -->
+    <line x1="-56" y1="-90" x2="-56" y2="90" stroke="white" stroke-width="2.8" opacity="0.9"/>
+    <line x1="-38" y1="-94" x2="-38" y2="94" stroke="white" stroke-width="2.8" opacity="0.9"/>
+    <line x1="-19" y1="-95" x2="-19" y2="95" stroke="white" stroke-width="2.8" opacity="0.9"/>
+    <line x1="0"   y1="-95" x2="0"   y2="95" stroke="white" stroke-width="2.8" opacity="0.9"/>
+    <line x1="19"  y1="-95" x2="19"  y2="95" stroke="white" stroke-width="2.8" opacity="0.9"/>
+    <line x1="38"  y1="-94" x2="38"  y2="94" stroke="white" stroke-width="2.8" opacity="0.9"/>
+    <line x1="56"  y1="-90" x2="56"  y2="90" stroke="white" stroke-width="2.8" opacity="0.9"/>
+
+    <!-- フレーム枠（ストリングを覆う） -->
+    <ellipse cx="0" cy="0" rx="80" ry="95" fill="none" stroke="#ff6fa3" stroke-width="11"/>
+    <ellipse cx="0" cy="0" rx="80" ry="95" fill="none" stroke="white" stroke-width="3" opacity="0.4"/>
+  </g>
+
+  <!-- シャトル（右上） -->
+  <g transform="translate(360,120) rotate(15)">
+    <!-- コルク -->
+    <ellipse cx="0" cy="0" rx="19" ry="15" fill="#ffd89b"/>
+    <ellipse cx="0" cy="0" rx="19" ry="15" fill="none" stroke="#e8a45a" stroke-width="2.5"/>
+    <!-- 羽根（5枚） -->
+    <ellipse cx="0"   cy="-38" rx="10" ry="30" fill="white" stroke="#ddd" stroke-width="1.5" opacity="0.95"/>
+    <ellipse cx="14"  cy="-34" rx="9"  ry="29" fill="white" stroke="#ddd" stroke-width="1.5" opacity="0.90" transform="rotate(16,14,-34)"/>
+    <ellipse cx="-14" cy="-34" rx="9"  ry="29" fill="white" stroke="#ddd" stroke-width="1.5" opacity="0.90" transform="rotate(-16,-14,-34)"/>
+    <ellipse cx="25"  cy="-26" rx="9"  ry="27" fill="white" stroke="#ddd" stroke-width="1.5" opacity="0.85" transform="rotate(30,25,-26)"/>
+    <ellipse cx="-25" cy="-26" rx="9"  ry="27" fill="white" stroke="#ddd" stroke-width="1.5" opacity="0.85" transform="rotate(-30,-25,-26)"/>
+    <!-- 羽根先端リング -->
+    <ellipse cx="0" cy="-63" rx="30" ry="6" fill="none" stroke="#bbb" stroke-width="2.2" opacity="0.75"/>
+  </g>
+
+  <!-- キラキラ -->
+  <g font-size="30" opacity="0.75">
+    <text x="82" y="118">✨</text>
+  </g>
+  <g font-size="20" opacity="0.6">
+    <text x="378" y="405">⭐</text>
+    <text x="52" y="400">💫</text>
+    <text x="400" y="245">✦</text>
+  </g>
 </svg>
