@@ -1,21 +1,26 @@
 import { useState } from 'react'
 import { differenceInDays, parseISO } from 'date-fns'
-import { Plus, Bell, BellOff, Thermometer, Droplets, RefreshCw, HelpCircle } from 'lucide-react'
+import { Plus, Bell, BellOff, Thermometer, Droplets, RefreshCw, HelpCircle, ShoppingCart } from 'lucide-react'
 import { useRackets } from './hooks/useRackets'
 import { useNotifications } from './hooks/useNotifications'
 import { useOkinawaWeather } from './hooks/useOkinawaWeather'
+import { usePriceSearch } from './hooks/usePriceSearch'
 import RacketCard from './components/RacketCard'
 import RacketForm from './components/RacketForm'
 import NotificationBanner from './components/NotificationBanner'
 import HelpModal from './components/HelpModal'
+import { SearchBar } from './components/SearchBar'
+import { PriceComparisonResult } from './components/PriceComparisonResult'
 
 export default function App() {
   const { rackets, addRacket, updateRacket, deleteRacket } = useRackets()
   const { permission, requestPermission, checkAndNotify } = useNotifications(rackets)
   const { weather, loading: weatherLoading, error: weatherError, updatedAt, refetch } = useOkinawaWeather()
+  const { results, loading: searchLoading, error: searchError, query, search } = usePriceSearch()
   const [showForm, setShowForm] = useState(false)
   const [editTarget, setEditTarget] = useState(null)
   const [showHelp, setShowHelp] = useState(false)
+  const [activeTab, setActiveTab] = useState('rackets')
 
   function handleSave(data) {
     if (editTarget) {
@@ -50,75 +55,121 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="max-w-2xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-4 py-8">
         <header className="mb-6">
-          <div className="flex items-center justify-between mb-1 gap-2">
+          <div className="flex items-center justify-between mb-4 gap-2">
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-2xl shrink-0">🏸</span>
-              <h1 className="text-xl font-bold text-gray-900 whitespace-nowrap">ストリング管理</h1>
+              <span className="text-2xl shrink-0">{activeTab === 'rackets' ? '🏸' : '🛒'}</span>
+              <h1 className="text-xl font-bold text-gray-900 whitespace-nowrap">
+                {activeTab === 'rackets' ? 'ストリング管理' : '価格比較'}
+              </h1>
             </div>
-            <div className="flex items-center gap-1 shrink-0">
-              <button
-                onClick={() => setShowHelp(true)}
-                title="計算モデルについて"
-                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
-              >
-                <HelpCircle size={18} />
-              </button>
-              {permission === 'granted' && (
+            <div className="flex items-center gap-2 shrink-0">
+              <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
                 <button
-                  onClick={checkAndNotify}
-                  title="通知を今すぐチェック"
-                  className="p-1.5 text-blue-500 hover:bg-blue-50 rounded-xl transition-colors"
+                  onClick={() => setActiveTab('rackets')}
+                  className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                    activeTab === 'rackets'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
                 >
-                  <Bell size={18} />
+                  🏸 管理
                 </button>
+                <button
+                  onClick={() => setActiveTab('comparison')}
+                  className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                    activeTab === 'comparison'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  🛒 比較
+                </button>
+              </div>
+              {activeTab === 'rackets' && (
+                <>
+                  <button
+                    onClick={() => setShowHelp(true)}
+                    title="計算モデルについて"
+                    className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
+                  >
+                    <HelpCircle size={18} />
+                  </button>
+                  {permission === 'granted' && (
+                    <button
+                      onClick={checkAndNotify}
+                      title="通知を今すぐチェック"
+                      className="p-1.5 text-blue-500 hover:bg-blue-50 rounded-xl transition-colors"
+                    >
+                      <Bell size={18} />
+                    </button>
+                  )}
+                  {permission === 'denied' && (
+                    <span title="通知がブロックされています" className="p-1.5 text-gray-400">
+                      <BellOff size={18} />
+                    </span>
+                  )}
+                  <button
+                    onClick={() => setShowForm(true)}
+                    className="flex items-center gap-1.5 bg-blue-600 text-white text-sm font-medium px-3 py-2 rounded-xl hover:bg-blue-700 transition-colors shadow-sm whitespace-nowrap"
+                  >
+                    <Plus size={16} /> ラケット追加
+                  </button>
+                </>
               )}
-              {permission === 'denied' && (
-                <span title="通知がブロックされています" className="p-1.5 text-gray-400">
-                  <BellOff size={18} />
-                </span>
-              )}
-              <button
-                onClick={() => setShowForm(true)}
-                className="flex items-center gap-1.5 bg-blue-600 text-white text-sm font-medium px-3 py-2 rounded-xl hover:bg-blue-700 transition-colors shadow-sm whitespace-nowrap"
-              >
-                <Plus size={16} /> ラケット追加
-              </button>
             </div>
           </div>
-          <p className="text-xs text-gray-500 ml-9">バドミントンストリングのテンション・交換時期を管理</p>
+          <p className="text-xs text-gray-500 ml-9">
+            {activeTab === 'rackets'
+              ? 'バドミントンストリングのテンション・交換時期を管理'
+              : '美容・サプリメント商品の最安値を検索'}
+          </p>
         </header>
 
-        {/* Okinawa weather strip */}
-        <WeatherStrip weather={weather} loading={weatherLoading} error={weatherError} updatedAt={updatedAt} onRefresh={refetch} />
+        {activeTab === 'rackets' ? (
+          <>
+            {/* Okinawa weather strip */}
+            <WeatherStrip weather={weather} loading={weatherLoading} error={weatherError} updatedAt={updatedAt} onRefresh={refetch} />
 
-        <div className="mb-6 mt-4">
-          <NotificationBanner permission={permission} onRequest={requestPermission} />
-        </div>
+            <div className="mb-6 mt-4">
+              <NotificationBanner permission={permission} onRequest={requestPermission} />
+            </div>
 
-        {rackets.length > 0 && (
-          <div className="grid grid-cols-3 gap-3 mb-6">
-            <StatCard label="ラケット数" value={rackets.length} />
-            <StatCard label="交換超過" value={overdueCount} warn={overdueCount > 0} />
-            <StatCard label="通知" value={permission === 'granted' ? 'ON' : 'OFF'} />
-          </div>
-        )}
+            {rackets.length > 0 && (
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <StatCard label="ラケット数" value={rackets.length} />
+                <StatCard label="交換超過" value={overdueCount} warn={overdueCount > 0} />
+                <StatCard label="通知" value={permission === 'granted' ? 'ON' : 'OFF'} />
+              </div>
+            )}
 
-        {rackets.length === 0 ? (
-          <EmptyState onAdd={() => setShowForm(true)} />
+            {rackets.length === 0 ? (
+              <EmptyState onAdd={() => setShowForm(true)} />
+            ) : (
+              <div className="flex flex-col gap-4">
+                {rackets.map(racket => (
+                  <RacketCard
+                    key={racket.id}
+                    racket={racket}
+                    weather={weather}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         ) : (
-          <div className="flex flex-col gap-4">
-            {rackets.map(racket => (
-              <RacketCard
-                key={racket.id}
-                racket={racket}
-                weather={weather}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-            ))}
-          </div>
+          <>
+            <SearchBar onSearch={search} isLoading={searchLoading} />
+            <PriceComparisonResult
+              results={results}
+              loading={searchLoading}
+              error={searchError}
+              query={query}
+            />
+          </>
         )}
       </div>
 

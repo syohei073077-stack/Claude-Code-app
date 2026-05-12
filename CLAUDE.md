@@ -5,17 +5,38 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev       # Start dev server (Vite HMR)
+npm run dev       # Start dev server (Vite HMR on :5173)
+npm run api:dev   # Start Express API server (on :3001)
 npm run build     # Production build
 npm run lint      # ESLint
 npm run preview   # Preview production build locally
 ```
 
+For local development, run both `npm run dev` and `npm run api:dev` in separate terminals.
+
 No test runner is configured.
+
+## Setup
+
+1. Copy `.env.local.example` to `.env.local`
+2. Add your Rakuten API key (see instructions in `.env.local.example`)
 
 ## Architecture
 
-This is a **React 19 + Vite + Tailwind CSS v4** single-page app for managing badminton racket string tension. All state is client-side with no backend.
+This is a **React 19 + Vite + Tailwind CSS v4** app with two main features:
+
+1. **Badminton racket string tension manager** — client-side only
+2. **Beauty/supplement price comparison** — uses Express backend to aggregate prices from multiple retailers
+
+### Backend
+
+Express.js server (`api/index.js`) running on port 3001. Provides:
+- `/api/search?q={keyword}` — aggregated product search across retailers
+- `/api/rakuten?q={keyword}` — Rakuten API integration
+- (Phase 2+) `/api/yahoo?q={keyword}` — Yahoo!ショッピング integration
+- (Phase 3+) Scraping routes for iHerb, Qoo10, etc.
+
+Vite dev server proxies `/api/*` requests to localhost:3001.
 
 ### Data flow
 
