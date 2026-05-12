@@ -13,7 +13,8 @@ const STATUS_STYLES = {
 }
 
 export default function RacketCard({ racket, onEdit, onDelete, weather }) {
-  const [showDetail, setShowDetail] = useState(false)
+  const [expanded, setExpanded] = useState(false)
+  const [showBreakdown, setShowBreakdown] = useState(false)
 
   const temp = weather?.temperature ?? null
   const humid = weather?.humidity ?? null
@@ -33,127 +34,118 @@ export default function RacketCard({ racket, onEdit, onDelete, weather }) {
     : null
 
   return (
-    <div className={`bg-white rounded-2xl border-2 ${style.card} shadow-sm hover:shadow-md transition-shadow p-5 flex flex-col gap-4`}>
-      <div className="flex items-start justify-between gap-2">
+    <div className={`bg-white rounded-2xl border-2 ${style.card} shadow-sm hover:shadow-md transition-shadow`}>
+
+      {/* ── 常に表示するヘッダー（クリックで展開） ── */}
+      <button
+        onClick={() => setExpanded(v => !v)}
+        className="w-full text-left px-5 pt-4 pb-3 flex items-center gap-3"
+      >
+        {/* ステータスバー（細線） */}
+        <div className="shrink-0 w-1 h-10 rounded-full bg-gray-100 overflow-hidden">
+          <div className={`w-full rounded-full transition-all ${style.bar}`} style={{ height: `${progress}%` }} />
+        </div>
+
         <div className="flex-1 min-w-0">
-          <h2 className="text-lg font-bold text-gray-900 truncate">
+          <h2 className="text-base font-bold text-gray-900 truncate">
             {racket.brand ? `${racket.brand} ` : ''}{racket.name}
           </h2>
-          <p className="text-sm text-gray-500 truncate">
-            {[racket.racketType, racket.stringType].filter(Boolean).join(' · ') || '—'}
+          <p className="text-xs text-gray-400 truncate mt-0.5">
+            {[racket.stringType, currentTension ? `現在 ${currentTension} lbs` : null].filter(Boolean).join('  ·  ') || '—'}
           </p>
         </div>
-        <span className={`shrink-0 text-xs font-medium px-2 py-1 rounded-full border ${style.badge}`}>
-          {style.label}
-        </span>
-      </div>
 
-      <div className="grid grid-cols-2 gap-3 text-sm">
-        <InfoItem label="張り日" value={racket.stringDate ? format(parseISO(racket.stringDate), 'yyyy/MM/dd', { locale: ja }) : '—'} />
-        <InfoItem label="初期テンション" value={racket.tension ? `${racket.tension} lbs` : '—'} />
-        <InfoItem
-          label="現在のテンション"
-          value={currentTension ? `${currentTension} lbs` : '—'}
-          sub={tensionLoss ? `−${tensionLoss} lbs` : null}
-          highlight
-        />
-        <InfoItem
-          label="残日数"
-          value={status ? (status.remaining <= 0 ? `${Math.abs(status.remaining)}日超過` : `あと ${status.remaining}日`) : '—'}
-          warn={level === 'overdue' || level === 'soon'}
-        />
-      </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className={`text-xs font-medium px-2 py-1 rounded-full border ${style.badge}`}>
+            {style.label}
+          </span>
+          {expanded
+            ? <ChevronUp size={16} className="text-gray-400" />
+            : <ChevronDown size={16} className="text-gray-400" />
+          }
+        </div>
+      </button>
 
-      {racket.replacementDays && (
-        <div>
-          <div className="flex justify-between text-xs text-gray-400 mb-1">
-            <span>{status?.elapsed ?? 0}日経過</span>
-            <span>{racket.replacementDays}日</span>
-          </div>
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-            <div
-              className={`h-full rounded-full transition-all ${style.bar}`}
-              style={{ width: `${progress}%` }}
+      {/* ── 展開時の詳細 ── */}
+      {expanded && (
+        <div className="px-5 pb-5 flex flex-col gap-4 border-t border-gray-100 pt-4">
+
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <InfoItem label="ストリング張った日" value={racket.stringDate ? format(parseISO(racket.stringDate), 'yyyy/MM/dd', { locale: ja }) : '—'} />
+            <InfoItem label="初期テンション" value={racket.tension ? `${racket.tension} lbs` : '—'} />
+            <InfoItem
+              label="現在のテンション"
+              value={currentTension ? `${currentTension} lbs` : '—'}
+              sub={tensionLoss ? `−${tensionLoss} lbs` : null}
+              highlight
+            />
+            <InfoItem
+              label="残日数"
+              value={status ? (status.remaining <= 0 ? `${Math.abs(status.remaining)}日超過` : `あと ${status.remaining}日`) : '—'}
+              warn={level === 'overdue' || level === 'soon'}
             />
           </div>
-        </div>
-      )}
 
-      {/* Okinawa weather & tension breakdown */}
-      {breakdown && (
-        <div>
-          <button
-            onClick={() => setShowDetail(v => !v)}
-            className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            {showDetail ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-            沖縄気象による補正内訳
-          </button>
-          {showDetail && (
-            <div className="mt-2 bg-sky-50 rounded-xl px-4 py-3 text-xs text-gray-600 flex flex-col gap-1.5">
-              <WeatherRow
-                icon="🌡️"
-                label={`現在の気温 (沖縄)`}
-                value={temp !== null ? `${temp}°C` : '—'}
-              />
-              <WeatherRow
-                icon="💧"
-                label={`現在の湿度 (沖縄)`}
-                value={humid !== null ? `${humid}%` : '—'}
-              />
-              <div className="border-t border-sky-200 my-1" />
-              <WeatherRow
-                icon="📅"
-                label={`張り日からの平均気温`}
-                value={`${breakdown.avgTemp}°C`}
-              />
-              <WeatherRow
-                icon="🌊"
-                label={`張り日からの平均湿度`}
-                value={`${breakdown.avgHumid}%`}
-              />
-              <div className="border-t border-sky-200 my-1" />
-              <WeatherRow
-                icon="🔥"
-                label="気温によるテンション低下"
-                value={`${breakdown.tempLoss} lbs`}
-                warn
-              />
-              <WeatherRow
-                icon="💦"
-                label="湿度によるテンション低下"
-                value={`${breakdown.humidLoss} lbs`}
-                warn
-              />
-              <WeatherRow
-                icon="🏸"
-                label={`使用による低下（推定${breakdown.sessions}回）`}
-                value={`${breakdown.usageLoss} lbs`}
-                warn
-              />
+          {racket.replacementDays && (
+            <div>
+              <div className="flex justify-between text-xs text-gray-400 mb-1">
+                <span>{status?.elapsed ?? 0}日経過</span>
+                <span>{racket.replacementDays}日</span>
+              </div>
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all ${style.bar}`}
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
             </div>
           )}
+
+          {breakdown && (
+            <div>
+              <button
+                onClick={() => setShowBreakdown(v => !v)}
+                className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                {showBreakdown ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                沖縄気象による補正内訳
+              </button>
+              {showBreakdown && (
+                <div className="mt-2 bg-sky-50 rounded-xl px-4 py-3 text-xs text-gray-600 flex flex-col gap-1.5">
+                  <WeatherRow icon="🌡️" label="現在の気温 (沖縄)" value={temp !== null ? `${temp}°C` : '—'} />
+                  <WeatherRow icon="💧" label="現在の湿度 (沖縄)" value={humid !== null ? `${humid}%` : '—'} />
+                  <div className="border-t border-sky-200 my-1" />
+                  <WeatherRow icon="📅" label="張り日からの平均気温" value={`${breakdown.avgTemp}°C`} />
+                  <WeatherRow icon="🌊" label="張り日からの平均湿度" value={`${breakdown.avgHumid}%`} />
+                  <div className="border-t border-sky-200 my-1" />
+                  <WeatherRow icon="🔥" label="気温によるテンション低下" value={`${breakdown.tempLoss} lbs`} warn />
+                  <WeatherRow icon="💦" label="湿度によるテンション低下" value={`${breakdown.humidLoss} lbs`} warn />
+                  <WeatherRow icon="🏸" label={`使用による低下（推定${breakdown.sessions}回）`} value={`${breakdown.usageLoss} lbs`} warn />
+                </div>
+              )}
+            </div>
+          )}
+
+          {racket.memo && (
+            <p className="text-xs text-gray-400 bg-gray-50 rounded-lg px-3 py-2">{racket.memo}</p>
+          )}
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => onEdit(racket)}
+              className="flex-1 flex items-center justify-center gap-1.5 text-sm text-blue-600 border border-blue-200 rounded-xl py-2 hover:bg-blue-50 transition-colors"
+            >
+              <Pencil size={14} /> 編集
+            </button>
+            <button
+              onClick={() => onDelete(racket.id)}
+              className="flex items-center justify-center gap-1.5 text-sm text-red-500 border border-red-200 rounded-xl px-3 py-2 hover:bg-red-50 transition-colors"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
         </div>
       )}
-
-      {racket.memo && (
-        <p className="text-xs text-gray-400 bg-gray-50 rounded-lg px-3 py-2">{racket.memo}</p>
-      )}
-
-      <div className="flex gap-2 pt-1">
-        <button
-          onClick={() => onEdit(racket)}
-          className="flex-1 flex items-center justify-center gap-1.5 text-sm text-blue-600 border border-blue-200 rounded-xl py-2 hover:bg-blue-50 transition-colors"
-        >
-          <Pencil size={14} /> 編集
-        </button>
-        <button
-          onClick={() => onDelete(racket.id)}
-          className="flex items-center justify-center gap-1.5 text-sm text-red-500 border border-red-200 rounded-xl px-3 py-2 hover:bg-red-50 transition-colors"
-        >
-          <Trash2 size={14} />
-        </button>
-      </div>
     </div>
   )
 }
