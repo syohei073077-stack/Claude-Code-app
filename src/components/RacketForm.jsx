@@ -1,120 +1,203 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 
+// ---- ブランド ----
 const RACKET_BRANDS = [
-  'Yonex', 'ミズノ', 'ゴーセン', 'Victor', 'Li-Ning',
-  'アパックス', 'バボラ', 'Forza', 'Kumpoo', 'その他',
+  'YONEX', 'ミズノ', 'ゴーセン', 'Victor', 'Li-Ning',
+  'アパックス', 'バボラ', 'FORZA', 'Kumpoo', 'その他',
 ]
 
-const RACKET_MODELS = {
-  'Yonex': [
-    'アストロクス88D PRO',
-    'アストロクス88S PRO',
-    'アストロクス99 PRO',
-    'アストロクス99 GAME',
-    'アストロクス77 PRO',
-    'アストロクス77 GAME',
-    'アストロクス55',
-    'アストロクス22 PRO',
-    'アストロクス22',
-    'ナノフレア1000Z',
-    'ナノフレア1000ゲーム',
-    'ナノフレア800PRO',
-    'ナノフレア800',
-    'ナノフレア800ゲーム',
-    'ナノフレア700',
-    'ナノフレア600',
-    'ナノフレア370スピード',
-    'アークセイバー11PRO',
-    'アークセイバー7PRO',
-    'デュオラ10',
-    'その他',
+// ---- ラケットモデル（シリーズ別グループ） ----
+const RACKET_MODEL_GROUPS = {
+  'YONEX': [
+    {
+      group: 'アストロクス',
+      models: [
+        'アストロクス88D PRO', 'アストロクス88D TOUR', 'アストロクス88D GAME', 'アストロクス88D PLAY',
+        'アストロクス88S PRO', 'アストロクス88S TOUR', 'アストロクス88S GAME', 'アストロクス88S PLAY',
+        'アストロクス99 PRO', 'アストロクス99 TOUR', 'アストロクス99 GAME', 'アストロクス99 PLAY',
+        'アストロクス77 PRO', 'アストロクス77 TOUR', 'アストロクス77 GAME', 'アストロクス77 PLAY',
+        'アストロクス55',
+        'アストロクス38D', 'アストロクス38S',
+        'アストロクス22 PRO', 'アストロクス22 TOUR', 'アストロクス22 GAME', 'アストロクス22 PLAY',
+        'アストロクス7DG', 'アストロクス1DG',
+      ],
+    },
+    {
+      group: 'アークセイバー',
+      models: [
+        'アークセイバー11 PRO', 'アークセイバー11 TOUR', 'アークセイバー11 GAME', 'アークセイバー11 PLAY',
+        'アークセイバー7 PRO', 'アークセイバー7 TOUR', 'アークセイバー7 GAME', 'アークセイバー7 PLAY',
+      ],
+    },
+    {
+      group: 'ナノフレア',
+      models: [
+        'ナノフレア1000Z',
+        'ナノフレア1000 GAME',
+        'ナノフレア800 PRO', 'ナノフレア800 TOUR', 'ナノフレア800 GAME', 'ナノフレア800 PLAY',
+        'ナノフレア700',
+        'ナノフレア600',
+        'ナノフレア370スピード',
+        'ナノフレア270スピード',
+      ],
+    },
+    {
+      group: 'デュオラ',
+      models: [
+        'デュオラ10 LT', 'デュオラZストライク',
+      ],
+    },
+    {
+      group: 'その他',
+      models: ['その他'],
+    },
   ],
   'ミズノ': [
-    'フォルティウス80',
-    'フォルティウス70',
-    'フォルティウス60',
-    'アルティウス01スピード',
-    'アルティウス01フィール',
-    'その他',
+    {
+      group: 'フォルティウス',
+      models: [
+        'フォルティウス80', 'フォルティウス70', 'フォルティウス60',
+        'フォルティウス70ストライク', 'フォルティウス60パワー',
+      ],
+    },
+    {
+      group: 'アルティウス',
+      models: [
+        'アルティウス01スピード', 'アルティウス01フィール',
+        'アルティウス01コンビ',
+      ],
+    },
+    {
+      group: 'その他',
+      models: ['その他'],
+    },
   ],
   'ゴーセン': [
-    'カルフォルニア CX S',
-    'カルフォルニア CX F',
-    'カルフォルニア CX P',
-    'その他',
+    {
+      group: 'カルフォルニア',
+      models: [
+        'カルフォルニア CX S', 'カルフォルニア CX F', 'カルフォルニア CX P',
+      ],
+    },
+    {
+      group: 'その他',
+      models: ['その他'],
+    },
   ],
   'Victor': [
-    'ブレイドX',
-    'スペクトラ10Q',
-    'スペクトラ9X',
-    'ハイパーナノX900',
-    'ハイパーナノX800',
-    'スレッシャー',
-    'その他',
+    {
+      group: 'BLADE X',
+      models: [
+        'BLADE X', 'BLADE X FlexR',
+      ],
+    },
+    {
+      group: 'HYPERNANO X',
+      models: [
+        'HYPERNANO X 900 TOUR', 'HYPERNANO X 900', 'HYPERNANO X 800',
+      ],
+    },
+    {
+      group: 'THRUSTER',
+      models: [
+        'THRUSTER RYUGA II PRO', 'THRUSTER K 12', 'THRUSTER K 12M',
+      ],
+    },
+    {
+      group: 'JETSPEED',
+      models: [
+        'JETSPEED S 12 II', 'JETSPEED S 12',
+      ],
+    },
+    {
+      group: 'AURASPEED',
+      models: [
+        'AURASPEED 100X', 'AURASPEED 90K',
+      ],
+    },
+    {
+      group: 'その他',
+      models: ['その他'],
+    },
   ],
   'Li-Ning': [
-    'TB ナノ',
-    'ハーモニカ',
-    'バウンド',
-    'その他',
-  ],
-  'アパックス': [
-    'アパックス スーパーシリーズ',
-    'その他',
-  ],
-  'バボラ': [
-    'サトリ ライト',
-    'サトリ エクスセル',
-    'その他',
-  ],
-  'Forza': [
-    'パワーブレード 1000',
-    'パワーブレード 900',
-    'その他',
-  ],
-  'Kumpoo': [
-    'K520',
-    'K530',
-    'その他',
+    {
+      group: 'TB NANO',
+      models: ['TB NANO', 'TB NANO 2', 'TB NANO LIGHT'],
+    },
+    {
+      group: 'AERONAUT',
+      models: ['AERONAUT 9000D', 'AERONAUT 9000C', 'AERONAUT 7000'],
+    },
+    {
+      group: 'その他',
+      models: ['その他'],
+    },
   ],
 }
 
-const STRING_TYPES = [
-  // Yonex
-  'ヨネックス BG65',
-  'ヨネックス BG65チタン',
-  'ヨネックス BG66',
-  'ヨネックス BG66フォース',
-  'ヨネックス BG66アルティマックス',
-  'ヨネックス BG80',
-  'ヨネックス BG80パワー',
-  'ヨネックス エアロバイト',
-  'ヨネックス エアロバイトブースト',
-  'ヨネックス ナノジー95',
-  'ヨネックス ナノジー98',
-  'ヨネックス ナノジー99',
-  'ヨネックス ナノジー99アセス',
-  'ヨネックス エクスボルト63',
-  'ヨネックス エクスボルト65',
-  'ヨネックス エクスボルト66',
-  // Victor
-  'ビクター VBS-66ナノ',
-  'ビクター VBS-70',
-  'ビクター VS-850',
-  // Gosen
-  'ゴーセン エッグパワー61',
-  'ゴーセン エッグパワー63',
-  'ゴーセン BM',
-  // Li-Ning
-  'リーニン ナンバー1',
-  'リーニン ナンバー5',
-  // Ashaway
-  'アシュアウェイ ジーマックス66ファイア',
-  'アシュアウェイ ジーマックス68TX',
-  // その他
-  'その他',
+// ---- ストリング（ブランド別グループ） ----
+const STRING_TYPE_GROUPS = [
+  {
+    group: 'YONEX',
+    strings: [
+      'ナノジー99エース',
+      'ナノジー99',
+      'ナノジー98',
+      'ナノジー95',
+      'エクスボルト66',
+      'エクスボルト65',
+      'エクスボルト63',
+      'エアロバイトブースト',
+      'エアロバイト',
+      'BG80パワー',
+      'BG80',
+      'BG66アルティマックス',
+      'BG66フォース',
+      'BG66',
+      'BG65チタン',
+      'BG65',
+    ],
+  },
+  {
+    group: 'Victor',
+    strings: [
+      'VBS-66ナノ',
+      'VBS-70',
+      'VS-850',
+    ],
+  },
+  {
+    group: 'ゴーセン',
+    strings: [
+      'エッグパワー63',
+      'エッグパワー61',
+      'BM6500',
+    ],
+  },
+  {
+    group: 'Li-Ning',
+    strings: [
+      'ナンバー1',
+      'ナンバー5',
+    ],
+  },
+  {
+    group: 'アシュアウェイ',
+    strings: [
+      'ジーマックス66ファイア',
+      'ジーマックス68TX',
+    ],
+  },
+  {
+    group: 'その他',
+    strings: ['その他'],
+  },
 ]
+
+const ALL_MODELS = Object.values(RACKET_MODEL_GROUPS).flatMap(g => g.flatMap(s => s.models))
+const ALL_STRINGS = STRING_TYPE_GROUPS.flatMap(g => g.strings)
 
 const WEEKLY_FREQ_OPTIONS = [
   { value: 1, label: '週1回' },
@@ -125,9 +208,9 @@ const WEEKLY_FREQ_OPTIONS = [
   { value: 6, label: '週6回以上' },
 ]
 
-function initSelect(value, options) {
+function initSelect(value, allOptions) {
   if (!value) return { select: '', custom: '' }
-  if (options.includes(value)) return { select: value, custom: '' }
+  if (allOptions.includes(value)) return { select: value, custom: '' }
   return { select: 'その他', custom: value }
 }
 
@@ -150,13 +233,11 @@ export default function RacketForm({ initial, onSave, onCancel }) {
     memo: initial.memo ?? '',
   } : DEFAULT_FORM)
 
-  const modelOptions = RACKET_MODELS[form.brand] ?? []
-
   const [racketName, setRacketName] = useState(() =>
-    initSelect(initial?.name ?? '', RACKET_MODELS[initial?.brand ?? ''] ?? [])
+    initSelect(initial?.name ?? '', ALL_MODELS)
   )
   const [stringType, setStringType] = useState(() =>
-    initSelect(initial?.stringType ?? '', STRING_TYPES)
+    initSelect(initial?.stringType ?? '', ALL_STRINGS)
   )
 
   function set(key, value) {
@@ -182,6 +263,8 @@ export default function RacketForm({ initial, onSave, onCancel }) {
       weeklyFreq: Number(form.weeklyFreq),
     })
   }
+
+  const modelGroups = RACKET_MODEL_GROUPS[form.brand] ?? null
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -209,16 +292,19 @@ export default function RacketForm({ initial, onSave, onCancel }) {
           </Field>
 
           <Field label="ラケット名 *">
-            {modelOptions.length > 0 ? (
+            {modelGroups ? (
               <>
                 <select
                   value={racketName.select}
                   onChange={e => setRacketName({ select: e.target.value, custom: '' })}
                   className="input"
-                  required={racketName.select !== 'その他'}
                 >
                   <option value="">選択してください</option>
-                  {modelOptions.map(m => <option key={m} value={m}>{m}</option>)}
+                  {modelGroups.map(({ group, models }) => (
+                    <optgroup key={group} label={group}>
+                      {models.map(m => <option key={m} value={m}>{m}</option>)}
+                    </optgroup>
+                  ))}
                 </select>
                 {racketName.select === 'その他' && (
                   <input
@@ -235,7 +321,7 @@ export default function RacketForm({ initial, onSave, onCancel }) {
               <input
                 type="text"
                 required
-                placeholder="例: アストロクス99"
+                placeholder="例: アストロクス99 PRO"
                 value={racketName.select === 'その他' ? racketName.custom : racketName.select}
                 onChange={e => setRacketName({ select: 'その他', custom: e.target.value })}
                 className="input"
@@ -250,7 +336,11 @@ export default function RacketForm({ initial, onSave, onCancel }) {
               className="input"
             >
               <option value="">選択してください</option>
-              {STRING_TYPES.map(s => <option key={s} value={s}>{s}</option>)}
+              {STRING_TYPE_GROUPS.map(({ group, strings }) => (
+                <optgroup key={group} label={group}>
+                  {strings.map(s => <option key={s} value={s}>{s}</option>)}
+                </optgroup>
+              ))}
             </select>
             {stringType.select === 'その他' && (
               <input
