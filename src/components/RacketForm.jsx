@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 
-// ---- ブランド（公式表記） ----
+// ---- ブランド（公式表記・指定順） ----
 const RACKET_BRANDS = [
-  'YONEX', 'ミズノ', 'ゴーセン', 'Victor', 'Li-Ning',
-  'アパックス', 'Babolat', 'FORZA', 'Kumpoo', 'その他',
+  'YONEX', 'MIZUNO', 'APACS', 'LI-NING', 'VICTOR', 'GOSEN', 'Kumpoo', 'Babolat', 'FZ FORZA', 'その他',
 ]
 
-// ---- ラケットモデル（シリーズ別・公式表記） ----
+// ---- ラケットモデル（シリーズ別・新しい順） ----
 const RACKET_MODEL_GROUPS = {
   'YONEX': [
     {
@@ -35,17 +34,6 @@ const RACKET_MODEL_GROUPS = {
       ],
     },
     {
-      group: 'アークセイバー',
-      models: [
-        'アークセイバー11 PRO',
-        'アークセイバー11 TOUR',
-        'アークセイバー7 PRO',
-        'アークセイバー7 TOUR',
-        'アークセイバー3',
-        'アークセイバー1',
-      ],
-    },
-    {
       group: 'ナノフレア',
       models: [
         'ナノフレア1000Z',
@@ -64,6 +52,17 @@ const RACKET_MODEL_GROUPS = {
       ],
     },
     {
+      group: 'アークセイバー',
+      models: [
+        'アークセイバー11 PRO',
+        'アークセイバー11 TOUR',
+        'アークセイバー7 PRO',
+        'アークセイバー7 TOUR',
+        'アークセイバー3',
+        'アークセイバー1',
+      ],
+    },
+    {
       group: 'マッスルパワー',
       models: [
         'マッスルパワー6 LONG',
@@ -72,13 +71,228 @@ const RACKET_MODEL_GROUPS = {
         'マッスルパワー1',
       ],
     },
-    {
-      group: 'その他',
-      models: ['その他'],
-    },
+    { group: 'その他', models: ['その他'] },
   ],
 
-  'Victor': [
+  'MIZUNO': [
+    {
+      group: 'アクロフォース',
+      models: [
+        'アクロフォース 100',
+        'アクロフォース 200',
+        'アクロフォース 300',
+        'アクロフォース 600',
+      ],
+    },
+    {
+      group: 'アクロスピード',
+      models: [
+        'アクロスピード 1 アクセル',
+        'アクロスピード 1 ドライブ',
+        'アクロスピード 1 フォーカス',
+        'アクロスピード 3',
+        'アクロスピード 7',
+        'アクロスピード 8',
+      ],
+    },
+    {
+      group: 'アルティウス',
+      models: [
+        'アルティウス 01 フィール',
+        'アルティウス 01 スピード',
+        'アルティウス 02 ソレア',
+        'アルティウス 03 フィール',
+        'アルティウス J1 フォワード',
+        'アルティウス ソニック',
+      ],
+    },
+    {
+      group: 'フォルティウス',
+      models: [
+        'フォルティウス 11 クイック',
+        'フォルティウス 11 パワー',
+        'フォルティウス 20',
+        'フォルティウス 60',
+      ],
+    },
+    { group: 'その他', models: ['その他'] },
+  ],
+
+  'APACS': [
+    {
+      group: 'Woven',
+      models: [
+        'Woven Aggressive',
+        'Woven Power',
+        'Woven Accurate',
+        'Woven Control',
+        'Woven Speed',
+        'Woven Gold',
+        'Woven Ruby',
+      ],
+    },
+    {
+      group: 'Nano Fusion Speed',
+      models: [
+        'Nano Fusion Speed 722',
+        'Nano Fusion Speed XR',
+      ],
+    },
+    {
+      group: 'Duplex Power',
+      models: [
+        'Duplex Power 55',
+        'Duplex Power 63',
+        'Duplex Power 68',
+        'Duplex Power 72',
+        'Duplex Power 78',
+      ],
+    },
+    {
+      group: 'Feather Weight',
+      models: [
+        'Feather Weight 55',
+        'Feather Weight 65',
+        'Feather Weight 75',
+        'Feather Weight 500',
+        'Feather Weight X II',
+        'Feather Weight X Special',
+      ],
+    },
+    {
+      group: 'Z-Ziggler',
+      models: [
+        'Z-Ziggler',
+        'Z-Ziggler 72',
+        'Z-Ziggler Lite',
+        'Z-Ziggler Limited',
+        'Z-Ziggler Force II',
+        'Ziggler LHI Pro III',
+      ],
+    },
+    {
+      group: 'Stardom',
+      models: [
+        'Stardom 202',
+        'Stardom 90',
+        'Stardom 800',
+        'Stardom Fierce',
+        'Stardom Force',
+        'Stardom Pro III',
+      ],
+    },
+    {
+      group: 'Virtuoso',
+      models: [
+        'Virtuoso Light',
+        'Virtuoso 10',
+        'Virtuoso 20',
+        'Virtuoso 30',
+        'Virtuoso 50',
+        'Virtuoso 68',
+        'Virtuoso 80',
+        'Virtuoso 90',
+        'Virtuoso Pro III',
+      ],
+    },
+    {
+      group: 'Lethal',
+      models: [
+        'Lethal 6',
+        'Lethal 8',
+        'Lethal 9',
+        'Lethal 10',
+        'Lethal 28',
+        'Lethal Light Special',
+        'Lethal Light Power',
+      ],
+    },
+    {
+      group: 'Commander',
+      models: [
+        'Commander 10',
+        'Commander 20',
+        'Commander 30',
+        'Commander 50',
+        'Commander 60',
+        'Commander 80',
+        'Pro Commander',
+      ],
+    },
+    {
+      group: 'Slayer',
+      models: [
+        'Slayer 95 III',
+        'Slayer 95 II',
+        'Slayer 99',
+      ],
+    },
+    {
+      group: 'Tantrum',
+      models: [
+        'Tantrum 500 III',
+        'Tantrum 200 III',
+        'Tantrum Light',
+      ],
+    },
+    {
+      group: 'Nano',
+      models: [
+        'Nano 9900',
+        'Nano Tube 9990',
+        'Nano Power 900',
+      ],
+    },
+    { group: 'その他', models: ['その他'] },
+  ],
+
+  'LI-NING': [
+    {
+      group: 'AXFORCE（雷霆）',
+      models: [
+        'AXFORCE 100',
+        'AXFORCE 90 NEW',
+        'AXFORCE 80',
+        'AXFORCE 70',
+        'AXFORCE 60',
+        'AXFORCE BIGBANG NEW',
+      ],
+    },
+    {
+      group: 'BLADEX',
+      models: [
+        'BLADEX 900 SUN MAX',
+        'BLADEX 900 MOON MAX',
+        'BLADEX 700',
+        'BLADEX 73L',
+      ],
+    },
+    {
+      group: 'WINDSTORM',
+      models: [
+        'WINDSTORM 79H',
+        'WINDSTORM 74',
+        'WINDSTORM 72S',
+        'WINDSTORM 72',
+      ],
+    },
+    {
+      group: 'HALBERTEC',
+      models: [
+        'HALBERTEC 9000',
+        'HALBERTEC 9000 POWER',
+        'HALBERTEC 8000',
+        'HALBERTEC 7000',
+      ],
+    },
+    {
+      group: 'AERONAUT',
+      models: ['AERONAUT 9000C'],
+    },
+    { group: 'その他', models: ['その他'] },
+  ],
+
+  'VICTOR': [
     {
       group: 'AURASPEED（オーラスピード）',
       models: [
@@ -128,60 +342,17 @@ const RACKET_MODEL_GROUPS = {
         'JETSPEED S 12 F',
       ],
     },
-    {
-      group: 'その他',
-      models: ['その他'],
-    },
+    { group: 'その他', models: ['その他'] },
   ],
 
-  'ミズノ': [
+  'GOSEN': [
     {
-      group: 'アルティウス',
+      group: '凌駕（RYOGA）',
       models: [
-        'アルティウス 01 フィール',
-        'アルティウス 01 スピード',
-        'アルティウス 02 ソレア',
-        'アルティウス 03 フィール',
-        'アルティウス J1 フォワード',
-        'アルティウス ソニック',
+        '凌駕 無双',
+        '凌駕 無限',
       ],
     },
-    {
-      group: 'フォルティウス',
-      models: [
-        'フォルティウス 11 クイック',
-        'フォルティウス 11 パワー',
-        'フォルティウス 20',
-        'フォルティウス 60',
-      ],
-    },
-    {
-      group: 'アクロスピード',
-      models: [
-        'アクロスピード 1 アクセル',
-        'アクロスピード 1 ドライブ',
-        'アクロスピード 1 フォーカス',
-        'アクロスピード 3',
-        'アクロスピード 7',
-        'アクロスピード 8',
-      ],
-    },
-    {
-      group: 'アクロフォース',
-      models: [
-        'アクロフォース 100',
-        'アクロフォース 200',
-        'アクロフォース 300',
-        'アクロフォース 600',
-      ],
-    },
-    {
-      group: 'その他',
-      models: ['その他'],
-    },
-  ],
-
-  'ゴーセン': [
     {
       group: 'INFERNO（インフェルノ）',
       models: [
@@ -193,13 +364,6 @@ const RACKET_MODEL_GROUPS = {
       ],
     },
     {
-      group: '凌駕（RYOGA）',
-      models: [
-        '凌駕 無双',
-        '凌駕 無限',
-      ],
-    },
-    {
       group: 'GRAVITAS（グラビタス）',
       models: [
         'GRAVITAS 1.9-A',
@@ -207,61 +371,7 @@ const RACKET_MODEL_GROUPS = {
         'GRAVITAS 6.5-LL',
       ],
     },
-    {
-      group: 'その他',
-      models: ['その他'],
-    },
-  ],
-
-  'Li-Ning': [
-    {
-      group: 'AXFORCE（雷霆）',
-      models: [
-        'AXFORCE 100',
-        'AXFORCE 90 NEW',
-        'AXFORCE 80',
-        'AXFORCE 70',
-        'AXFORCE 60',
-        'AXFORCE BIGBANG NEW',
-      ],
-    },
-    {
-      group: 'HALBERTEC',
-      models: [
-        'HALBERTEC 9000',
-        'HALBERTEC 9000 POWER',
-        'HALBERTEC 8000',
-        'HALBERTEC 7000',
-      ],
-    },
-    {
-      group: 'BLADEX',
-      models: [
-        'BLADEX 900 SUN MAX',
-        'BLADEX 900 MOON MAX',
-        'BLADEX 700',
-        'BLADEX 73L',
-      ],
-    },
-    {
-      group: 'WINDSTORM',
-      models: [
-        'WINDSTORM 79H',
-        'WINDSTORM 74',
-        'WINDSTORM 72S',
-        'WINDSTORM 72',
-      ],
-    },
-    {
-      group: 'AERONAUT',
-      models: [
-        'AERONAUT 9000C',
-      ],
-    },
-    {
-      group: 'その他',
-      models: ['その他'],
-    },
+    { group: 'その他', models: ['その他'] },
   ],
 }
 
@@ -289,7 +399,7 @@ const STRING_TYPE_GROUPS = [
     ],
   },
   {
-    group: 'Victor',
+    group: 'VICTOR',
     strings: [
       'VBS-66ナノ',
       'VBS-70',
@@ -297,7 +407,7 @@ const STRING_TYPE_GROUPS = [
     ],
   },
   {
-    group: 'ゴーセン',
+    group: 'GOSEN',
     strings: [
       'エッグパワー63',
       'エッグパワー61',
@@ -305,14 +415,14 @@ const STRING_TYPE_GROUPS = [
     ],
   },
   {
-    group: 'Li-Ning',
+    group: 'LI-NING',
     strings: [
       'ナンバー1',
       'ナンバー5',
     ],
   },
   {
-    group: 'アシュアウェイ',
+    group: 'Ashaway',
     strings: [
       'ジーマックス66ファイア',
       'ジーマックス68TX',
