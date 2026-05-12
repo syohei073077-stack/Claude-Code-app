@@ -57,11 +57,21 @@ function humidCorrection(avgHumid) {
 }
 
 /**
+ * Usage correction: each session causes additional tension loss from repeated impact.
+ * -0.02 lbs per session (conservative estimate for nylon strings).
+ */
+function usageCorrection(weeklyFrequency, days) {
+  if (!weeklyFrequency || weeklyFrequency <= 0) return 0
+  const sessions = weeklyFrequency * (days / 7)
+  return -(sessions * 0.02)
+}
+
+/**
  * Main tension calculation.
  * Combines time-based degradation + temperature + humidity corrections.
  * currentTemp/currentHumid: real-time values from weather API (optional).
  */
-export function calcCurrentTension(initialTension, stringDate, currentTemp = null, currentHumid = null) {
+export function calcCurrentTension(initialTension, stringDate, currentTemp = null, currentHumid = null, weeklyFrequency = 0) {
   if (!initialTension || !stringDate) return null
   const days = differenceInDays(new Date(), parseISO(stringDate))
   if (days < 0) return initialTension
@@ -85,21 +95,27 @@ export function calcCurrentTension(initialTension, stringDate, currentTemp = nul
   if (currentTemp !== null) realtimeCorrection += tempCorrection(currentTemp) * 0.1
   if (currentHumid !== null) realtimeCorrection += humidCorrection(currentHumid) * 0.1
 
-  const final = tensionAfterTime + envCorrection + realtimeCorrection
-  return Math.round(Math.max(final, initialTension * 0.65) * 10) / 10
+  // Usage correction: impact stress from repeated play sessions
+  const useCorrection = usageCorrection(weeklyFrequency, days)
+
+  const final = tensionAfterTime + envCorrection + realtimeCorrection + useCorrection
+  return Math.round(Math.max(final, initialTension * 0.6) * 10) / 10
 }
 
-export function getTensionBreakdown(initialTension, stringDate, currentTemp, currentHumid) {
+export function getTensionBreakdown(initialTension, stringDate, currentTemp, currentHumid, weeklyFrequency = 0) {
   if (!initialTension || !stringDate) return null
   const days = differenceInDays(new Date(), parseISO(stringDate))
   const avgTemp = calcMonthlyWeightedAvg(stringDate, OKINAWA_MONTHLY_AVG_TEMP)
   const avgHumid = calcMonthlyWeightedAvg(stringDate, OKINAWA_MONTHLY_AVG_HUMID)
+  const sessions = weeklyFrequency > 0 ? Math.round(weeklyFrequency * (days / 7)) : 0
   return {
     days,
     avgTemp: Math.round(avgTemp * 10) / 10,
     avgHumid: Math.round(avgHumid),
     tempLoss: Math.round(tempCorrection(avgTemp) * 10) / 10,
     humidLoss: Math.round(humidCorrection(avgHumid) * 10) / 10,
+    sessions,
+    usageLoss: Math.round(usageCorrection(weeklyFrequency, days) * 10) / 10,
   }
 }
 

@@ -6,6 +6,14 @@ const COMMON_STRINGS = [
   'Victor VS-850', 'Li-Ning No.1', 'Ashaway Zymax 66 Fire',
 ]
 
+const WEEKLY_FREQUENCY_OPTIONS = [
+  { label: '週1回', value: 1 },
+  { label: '週2回', value: 2 },
+  { label: '週3回', value: 3 },
+  { label: '週4〜5回', value: 4 },
+  { label: '週6回以上', value: 6 },
+]
+
 const DEFAULT_FORM = {
   name: '',
   racketType: '',
@@ -13,6 +21,7 @@ const DEFAULT_FORM = {
   stringDate: new Date().toISOString().slice(0, 10),
   tension: '',
   replacementDays: 90,
+  weeklyFrequency: 2,
   memo: '',
 }
 
@@ -24,6 +33,7 @@ export default function RacketForm({ initial, onSave, onCancel }) {
     stringDate: initial.stringDate ?? DEFAULT_FORM.stringDate,
     tension: initial.tension ?? '',
     replacementDays: initial.replacementDays ?? 90,
+    weeklyFrequency: initial.weeklyFrequency ?? 2,
     memo: initial.memo ?? '',
   } : DEFAULT_FORM)
 
@@ -38,6 +48,7 @@ export default function RacketForm({ initial, onSave, onCancel }) {
       ...form,
       tension: form.tension ? Number(form.tension) : null,
       replacementDays: form.replacementDays ? Number(form.replacementDays) : null,
+      weeklyFrequency: Number(form.weeklyFrequency),
     })
   }
 
@@ -111,6 +122,19 @@ export default function RacketForm({ initial, onSave, onCancel }) {
             />
           </Field>
 
+          <Field label="バドミントンの頻度">
+            <select
+              value={form.weeklyFrequency}
+              onChange={e => set('weeklyFrequency', e.target.value)}
+              className="input"
+            >
+              {WEEKLY_FREQUENCY_OPTIONS.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-400 mt-1">※ テンション劣化の計算に使用します</p>
+          </Field>
+
           <Field label="張替え目安 (日)">
             <input
               type="number"
@@ -121,7 +145,7 @@ export default function RacketForm({ initial, onSave, onCancel }) {
               onChange={e => set('replacementDays', e.target.value)}
               className="input"
             />
-            <p className="text-xs text-gray-400 mt-1">※ 一般的な目安: 週1回プレー→ 90日、週3回→ 60日</p>
+            <p className="text-xs text-gray-400 mt-1">※ 一般的な目安: 週1回→ 90日、週3回→ 60日</p>
           </Field>
 
           <Field label="メモ">

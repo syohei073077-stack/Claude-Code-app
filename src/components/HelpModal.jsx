@@ -15,7 +15,7 @@ export default function HelpModal({ onClose }) {
 
           {/* Intro */}
           <p className="text-gray-500 leading-relaxed">
-            このアプリは3つの要素を組み合わせて現在のテンションを推定しています。
+            このアプリは4つの要素を組み合わせて現在のテンションを推定しています。
             いずれも厳密な計測値ではなく<span className="font-medium text-gray-700">参考目安</span>です。
           </p>
 
@@ -58,7 +58,26 @@ export default function HelpModal({ onClose }) {
           </Section>
 
           {/* Section 3 */}
-          <Section title="③ 湿度補正" badge="−0.02 lbs / %">
+          <Section title="③ 使用頻度補正" badge="−0.02 lbs / 回">
+            <p className="leading-relaxed">
+              ストリングはシャトルへの衝撃ごとに微細な変形を繰り返し、弾性が低下します。
+              1回のプレーセッションあたり
+              <span className="font-medium"> −0.02 lbs </span>
+              の損失を目安としています（ナイロン系ストリングの中間値）。
+            </p>
+            <p className="leading-relaxed mt-2">
+              例: 週3回 × 90日 = 約39セッション →
+              <span className="font-medium text-red-500"> −0.78 lbs </span>
+              の追加低下。週1回なら同期間で約 −0.26 lbs。
+            </p>
+            <Caveat>
+              1セッションの長さや強度によって実際の損失は変わります。
+              競技レベルの激しいプレーは余暇プレーより影響が大きくなります。
+            </Caveat>
+          </Section>
+
+          {/* Section 4 */}
+          <Section title="④ 湿度補正" badge="−0.02 lbs / %RH">
             <p className="leading-relaxed">
               ナイロン66（ストリングの主材料）は高湿度環境で
               <span className="font-medium">吸水率が3〜5%増加</span>します。
@@ -96,7 +115,7 @@ export default function HelpModal({ onClose }) {
             <p className="font-semibold text-amber-800">⚠️ モデルの限界</p>
             <ul className="list-disc list-inside space-y-1 text-amber-700 leading-relaxed">
               <li>精度は <span className="font-medium">±1〜2 lbs 程度</span> の目安です</li>
-              <li>打球による劣化（使用回数）は未反映です</li>
+              <li>使用頻度は週単位の平均で推定しており、セッションの強度は未反映です</li>
               <li>ポリ・ナチュラルガット系は補正係数が異なります</li>
               <li>張り方・マシンの違いによる個体差があります</li>
               <li>厳密な管理にはテンションゲージによる実測を推奨します</li>
