@@ -18,8 +18,9 @@ export default function RacketCard({ racket, onEdit, onDelete, weather }) {
   const temp = weather?.temperature ?? null
   const humid = weather?.humidity ?? null
 
-  const currentTension = calcCurrentTension(racket.tension, racket.stringDate, temp, humid)
-  const breakdown = getTensionBreakdown(racket.tension, racket.stringDate, temp, humid)
+  const freq = racket.weeklyFreq ?? 2
+  const currentTension = calcCurrentTension(racket.tension, racket.stringDate, temp, humid, freq)
+  const breakdown = getTensionBreakdown(racket.tension, racket.stringDate, temp, humid, freq)
   const status = getDaysStatus(racket.stringDate, racket.replacementDays)
   const level = getStatusLevel(status?.remaining ?? null)
   const style = STATUS_STYLES[level]
@@ -118,6 +119,12 @@ export default function RacketCard({ racket, onEdit, onDelete, weather }) {
                 icon="💦"
                 label="湿度によるテンション低下"
                 value={`${breakdown.humidLoss} lbs`}
+                warn
+              />
+              <WeatherRow
+                icon="🏸"
+                label={`使用による低下（推定${breakdown.sessions}回）`}
+                value={`${breakdown.usageLoss} lbs`}
                 warn
               />
             </div>

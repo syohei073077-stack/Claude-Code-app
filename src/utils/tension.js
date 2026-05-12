@@ -57,11 +57,20 @@ function humidCorrection(avgHumid) {
 }
 
 /**
+ * Usage-based degradation: each session (approx 1.5h of play) causes
+ * micro-abrasion and stress cycling. Estimated at -0.02 lbs per session.
+ */
+function usageCorrection(weeklyFreq, days) {
+  const sessions = (weeklyFreq ?? 2) * (days / 7)
+  return -sessions * 0.02
+}
+
+/**
  * Main tension calculation.
- * Combines time-based degradation + temperature + humidity corrections.
+ * Combines time-based degradation + temperature + humidity + usage corrections.
  * currentTemp/currentHumid: real-time values from weather API (optional).
  */
-export function calcCurrentTension(initialTension, stringDate, currentTemp = null, currentHumid = null) {
+export function calcCurrentTension(initialTension, stringDate, currentTemp = null, currentHumid = null, weeklyFreq = 2) {
   if (!initialTension || !stringDate) return null
   const days = differenceInDays(new Date(), parseISO(stringDate))
   if (days < 0) return initialTension
@@ -85,21 +94,26 @@ export function calcCurrentTension(initialTension, stringDate, currentTemp = nul
   if (currentTemp !== null) realtimeCorrection += tempCorrection(currentTemp) * 0.1
   if (currentHumid !== null) realtimeCorrection += humidCorrection(currentHumid) * 0.1
 
-  const final = tensionAfterTime + envCorrection + realtimeCorrection
+  const usageLoss = usageCorrection(weeklyFreq, days)
+
+  const final = tensionAfterTime + envCorrection + realtimeCorrection + usageLoss
   return Math.round(Math.max(final, initialTension * 0.65) * 10) / 10
 }
 
-export function getTensionBreakdown(initialTension, stringDate, currentTemp, currentHumid) {
+export function getTensionBreakdown(initialTension, stringDate, currentTemp, currentHumid, weeklyFreq = 2) {
   if (!initialTension || !stringDate) return null
   const days = differenceInDays(new Date(), parseISO(stringDate))
   const avgTemp = calcMonthlyWeightedAvg(stringDate, OKINAWA_MONTHLY_AVG_TEMP)
   const avgHumid = calcMonthlyWeightedAvg(stringDate, OKINAWA_MONTHLY_AVG_HUMID)
+  const sessions = Math.round((weeklyFreq ?? 2) * (days / 7))
   return {
     days,
     avgTemp: Math.round(avgTemp * 10) / 10,
     avgHumid: Math.round(avgHumid),
     tempLoss: Math.round(tempCorrection(avgTemp) * 10) / 10,
     humidLoss: Math.round(humidCorrection(avgHumid) * 10) / 10,
+    usageLoss: Math.round(usageCorrection(weeklyFreq, days) * 10) / 10,
+    sessions,
   }
 }
 

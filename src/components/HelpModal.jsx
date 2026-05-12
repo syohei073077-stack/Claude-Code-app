@@ -15,7 +15,7 @@ export default function HelpModal({ onClose }) {
 
           {/* Intro */}
           <p className="text-gray-500 leading-relaxed">
-            このアプリは3つの要素を組み合わせて現在のテンションを推定しています。
+            このアプリは4つの要素を組み合わせて現在のテンションを推定しています。
             いずれも厳密な計測値ではなく<span className="font-medium text-gray-700">参考目安</span>です。
           </p>
 
@@ -78,6 +78,27 @@ export default function HelpModal({ onClose }) {
             </p>
           </Section>
 
+          {/* Section 4 */}
+          <Section title="④ 使用頻度補正" badge="−0.02 lbs / セッション">
+            <p className="leading-relaxed">
+              1回のプレー（約1.5時間）ごとにストリングはシャトルとの衝突による
+              <span className="font-medium">微細な摩耗とクリープの蓄積</span>が進みます。
+              ラケットスポーツの研究では、打球数の増加とともにテンション損失が加速することが示されており、
+              実験データでは50〜100時間のプレーで初期テンションの
+              <span className="font-medium">5〜10% 相当が追加損失</span>
+              されると報告されています。
+            </p>
+            <p className="leading-relaxed mt-2">
+              本モデルでは入力された週の練習頻度から張り日以降の累積セッション数を算出し、
+              <span className="font-medium">1セッション = −0.02 lbs</span> として加算します。
+              例: 週3回 × 90日 ≈ 39セッション → <span className="font-medium text-red-500">−0.78 lbs</span>
+            </p>
+            <Caveat>
+              セッション時間や打球強度によって実際の劣化量は大きく異なります。
+              本補正はあくまで参考値です。
+            </Caveat>
+          </Section>
+
           {/* Okinawa averaging */}
           <Section title="沖縄の気象データの使い方">
             <p className="leading-relaxed">
@@ -96,8 +117,7 @@ export default function HelpModal({ onClose }) {
             <p className="font-semibold text-amber-800">⚠️ モデルの限界</p>
             <ul className="list-disc list-inside space-y-1 text-amber-700 leading-relaxed">
               <li>精度は <span className="font-medium">±1〜2 lbs 程度</span> の目安です</li>
-              <li>打球による劣化（使用回数）は未反映です</li>
-              <li>ポリ・ナチュラルガット系は補正係数が異なります</li>
+<li>ポリ・ナチュラルガット系は補正係数が異なります</li>
               <li>張り方・マシンの違いによる個体差があります</li>
               <li>厳密な管理にはテンションゲージによる実測を推奨します</li>
             </ul>

@@ -6,6 +6,15 @@ const COMMON_STRINGS = [
   'Victor VS-850', 'Li-Ning No.1', 'Ashaway Zymax 66 Fire',
 ]
 
+const WEEKLY_FREQ_OPTIONS = [
+  { value: 1, label: '週1回' },
+  { value: 2, label: '週2回' },
+  { value: 3, label: '週3回' },
+  { value: 4, label: '週4回' },
+  { value: 5, label: '週5回' },
+  { value: 6, label: '週6回以上' },
+]
+
 const DEFAULT_FORM = {
   name: '',
   racketType: '',
@@ -13,6 +22,7 @@ const DEFAULT_FORM = {
   stringDate: new Date().toISOString().slice(0, 10),
   tension: '',
   replacementDays: 90,
+  weeklyFreq: 2,
   memo: '',
 }
 
@@ -24,6 +34,7 @@ export default function RacketForm({ initial, onSave, onCancel }) {
     stringDate: initial.stringDate ?? DEFAULT_FORM.stringDate,
     tension: initial.tension ?? '',
     replacementDays: initial.replacementDays ?? 90,
+    weeklyFreq: initial.weeklyFreq ?? 2,
     memo: initial.memo ?? '',
   } : DEFAULT_FORM)
 
@@ -38,6 +49,7 @@ export default function RacketForm({ initial, onSave, onCancel }) {
       ...form,
       tension: form.tension ? Number(form.tension) : null,
       replacementDays: form.replacementDays ? Number(form.replacementDays) : null,
+      weeklyFreq: Number(form.weeklyFreq),
     })
   }
 
@@ -109,6 +121,18 @@ export default function RacketForm({ initial, onSave, onCancel }) {
               onChange={e => set('tension', e.target.value)}
               className="input"
             />
+          </Field>
+
+          <Field label="バドミントンの頻度">
+            <select
+              value={form.weeklyFreq}
+              onChange={e => set('weeklyFreq', e.target.value)}
+              className="input"
+            >
+              {WEEKLY_FREQ_OPTIONS.map(o => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
           </Field>
 
           <Field label="張替え目安 (日)">
