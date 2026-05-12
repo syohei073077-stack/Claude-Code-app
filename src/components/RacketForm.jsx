@@ -375,50 +375,90 @@ const RACKET_MODEL_GROUPS = {
   ],
 }
 
-// ---- ストリング（ブランド別グループ・公式表記） ----
+// ---- ストリング（ブランド・シリーズ別グループ・公式表記） ----
 const STRING_TYPE_GROUPS = [
   {
-    group: 'YONEX',
+    group: 'YONEX ナノジー',
     strings: [
       'ナノジー99エース',
       'ナノジー99',
       'ナノジー98',
       'ナノジー95',
-      'エクスボルト66',
-      'エクスボルト65',
+    ],
+  },
+  {
+    group: 'YONEX エクスボルト',
+    strings: [
       'エクスボルト63',
+      'エクスボルト65',
+      'エクスボルト68',
+    ],
+  },
+  {
+    group: 'YONEX エアロバイト / エアロソニック',
+    strings: [
       'エアロバイトブースト',
       'エアロバイト',
+      'エアロソニック',
+    ],
+  },
+  {
+    group: 'YONEX BG',
+    strings: [
       'BG80パワー',
       'BG80',
       'BG66アルティマックス',
       'BG66フォース',
-      'BG66',
       'BG65チタン',
       'BG65',
+      'スカイアーク',
     ],
   },
   {
-    group: 'VICTOR',
+    group: 'VICTOR VBS',
     strings: [
+      'VBS-63',
       'VBS-66ナノ',
+      'VBS-68',
+      'VBS-68パワー',
+      'VBS-69ナノ',
       'VBS-70',
-      'VS-850',
+      'VS-69',
     ],
   },
   {
-    group: 'GOSEN',
+    group: 'GOSEN ライゾニック',
     strings: [
-      'エッグパワー63',
-      'エッグパワー61',
-      'BM6500',
+      'ライゾニック58',
+      'ライゾニック65',
     ],
   },
   {
-    group: 'LI-NING',
+    group: 'MIZUNO M-スムース',
     strings: [
-      'ナンバー1',
-      'ナンバー5',
+      'M-スムース65H',
+      'M-スムース65R',
+      'M-スムース66H',
+      'M-スムース68S',
+    ],
+  },
+  {
+    group: 'LI-NING N',
+    strings: [
+      'N58',
+      'N61',
+      'N63',
+      'N65',
+      'N68',
+      'N69',
+      'N70',
+    ],
+  },
+  {
+    group: 'LI-NING No.',
+    strings: [
+      'No.1',
+      'No.5',
     ],
   },
   {
