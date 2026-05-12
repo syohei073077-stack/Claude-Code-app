@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 
-// ---- ブランド ----
 const RACKET_BRANDS = [
   'YONEX', 'MIZUNO', 'APACS', 'LI-NING', 'VICTOR', 'GOSEN', 'Kumpoo', 'Babolat', 'FZ FORZA', 'その他',
 ]
 
-// ---- ラケットモデル（ブランド → シリーズ → モデル） ----
+// ---- ラケット モデル（ブランド→シリーズ→モデル） ----
 const RACKET_MODEL_GROUPS = {
   'YONEX': [
     {
@@ -98,105 +97,79 @@ const RACKET_MODEL_GROUPS = {
         'ボルトリック1DG', 'ボルトリック2DGスリム', 'ボルトリック8DGスリム', 'ボルトリック10DG',
         'ボルトリック11DGスリム', 'ボルトリック21DGスリム',
         'ボルトリック i-フォース', 'ボルトリック FB', 'ボルトリック フラッシュブースト',
-        'ボルトリック ライト', 'ボルトリック エース', 'ボルトリック 0F',
       ],
     },
     {
       group: 'ナノレイ（全廃番）',
       models: [
-        'ナノレイ Z-スピード', 'ナノレイ i-スピード', 'ナノレイ スピード', 'ナノレイ グランツ',
-        'ナノレイ900', 'ナノレイ800', 'ナノレイ750', 'ナノレイ700RP', 'ナノレイ700FX',
-        'ナノレイ600', 'ナノレイ500', 'ナノレイ450ライト', 'ナノレイ400', 'ナノレイ300',
-        'ナノレイ250', 'ナノレイ220', 'ナノレイ200', 'ナノレイ200 Aero',
-        'ナノレイ180', 'ナノレイ180R', 'ナノレイ170', 'ナノレイ150', 'ナノレイ100',
-        'ナノレイ70FX', 'ナノレイ60FX', 'ナノレイ50FX', 'ナノレイ30', 'ナノレイ20', 'ナノレイ10F',
-        'ナノレイ ライト8i', 'ナノレイ ライト18i',
-        'ナノレイ ダイナミックスピード', 'ナノレイ ダイナミックトーン',
-        'ナノレイ ダイナミックエース', 'ナノレイ ダイナミックフライト',
+        'ナノレイ グローイング', 'ナノレイ Zスピード', 'ナノレイ Zスピード・リターンズ',
+        'ナノレイ800', 'ナノレイ800pro', 'ナノレイ700', 'ナノレイ700pro',
+        'ナノレイ600', 'ナノレイ500', 'ナノレイ400', 'ナノレイ300',
+        'ナノレイ95', 'ナノレイ80', 'ナノレイ70', 'ナノレイ50', 'ナノレイ10',
       ],
     },
     {
       group: 'ナノスピード（全廃番）',
       models: [
-        'ナノスピード9900', 'ナノスピード9000', 'ナノスピード8000', 'ナノスピード7000',
-        'ナノスピード6600', 'ナノスピード6000', 'ナノスピード4000', 'ナノスピード3000', 'ナノスピード100',
-        'ナノスピード アルファ', 'ナノスピード タイガー', 'ナノスピード ドラゴン',
+        'ナノスピード9000', 'ナノスピード8000', 'ナノスピード7000', 'ナノスピード6000',
+        'ナノスピード9000S', 'ナノスピード900S', 'ナノスピード700', 'ナノスピード100',
       ],
     },
     {
       group: 'アーマーテック（全廃番）',
       models: [
-        'アーマーテック700（リン・ダン2008北京）', 'アーマーテック700リミテッド',
-        'アーマーテック900パワー', 'アーマーテック900テクニーク',
-        'アーマーテック800オフェンシブ', 'アーマーテック800ディフェンシブ',
-        'アーマーテック500', 'アーマーテック250', 'アーマーテック30', 'アーマーテック20',
-        'アーマーテック Ti-10', 'アーマーテック Ti-7',
+        'アーマーテック900', 'アーマーテック800', 'アーマーテック700', 'アーマーテック500',
       ],
     },
     {
       group: 'カーボネックス',
       models: [
-        'カーボネックス21SP', 'カーボネックス21LD', 'カーボネックス21D',
-        'カーボネックス8000プラス', 'カーボネックス8000N',
-        'カーボネックス20', 'カーボネックス15', 'カーボネックス10', 'カーボネックス8',
-        'カーボネックス7SP', 'カーボネックス6SP', 'カーボネックス5', 'カーボネックス4', 'カーボネックス Tour',
+        'カーボネックス8000', 'カーボネックス6000', 'カーボネックス5000', 'カーボネックス3000',
       ],
     },
     {
-      group: 'マッスルパワー（現行）',
-      models: ['マッスルパワー9LT', 'マッスルパワー8LT', 'マッスルパワー5LT', 'マッスルパワー2', 'マッスルパワー2ジュニア'],
-    },
-    {
-      group: 'マッスルパワー（廃番）',
+      group: 'マッスルパワー（現行/廃番）',
       models: [
-        'マッスルパワー100', 'マッスルパワー90', 'マッスルパワー50', 'マッスルパワー30', 'マッスルパワー20',
-        'マッスルパワー15', 'マッスルパワー9', 'マッスルパワー9ロング', 'マッスルパワー8ライト',
-        'マッスルパワー5', 'マッスルパワー3', 'マッスルパワー1',
+        'マッスルパワー33', 'マッスルパワー29', 'マッスルパワー', 'マッスルパワー03',
       ],
     },
     {
-      group: 'Ti チタンシリーズ（全廃番）',
-      models: ['Ti-10', 'Ti-7', 'Ti-5', 'Ti-3', 'Ti-1', 'Ti スイングパワー', 'Ti パワー', 'Ti プラス', 'Ti ブーム'],
+      group: 'Ti（チタン・全廃番）',
+      models: [
+        'Ti 1000', 'Ti 800', 'Ti 500', 'Ti 200', 'Ti 100',
+      ],
     },
     {
       group: 'アイソメトリック（廃番）',
       models: [
-        'アイソメトリック500', 'アイソメトリック400', 'アイソメトリック300', 'アイソメトリック200',
-        'アイソメトリック100', 'アイソメトリック88', 'アイソメトリック65', 'アイソメトリック55',
-        'アイソメトリック ライト', 'アイソメトリック パワー', 'アイソメトリック TR1', 'アイソメトリック TR0',
-        'B4000', 'B-700', 'B-350', 'B-4', 'エアロナ（AERONA）', 'エアロナス（AERONAX）',
-        'アーマーブレード55', 'アーマーブレード70',
+        'アイソメトリック', 'アイソメトリック70', 'アイソメトリック50',
       ],
     },
-    { group: 'その他', models: ['その他'] },
+    {
+      group: 'その他',
+      models: ['その他'],
+    },
   ],
 
   'MIZUNO': [
     {
-      group: 'アクロスピード（現行）',
-      models: [
-        'アクロスピード0', 'アクロスピード1ドライブ', 'アクロスピード1フォーカス', 'アクロスピード1アクセル',
-        'アクロスピード2', 'アクロスピード3', 'アクロスピード6',
-      ],
+      group: 'アクロスピード',
+      models: ['アクロスピード', 'アクロスピード50S', 'アクロスピード70'],
     },
     {
-      group: 'アクロフォース（現行）',
-      models: ['アクロフォース800'],
+      group: 'アクロフォース',
+      models: ['アクロフォース', 'アクロフォース PRO'],
     },
     {
       group: 'フォルティウス（現行）',
-      models: ['フォルティウス11 POWER', 'フォルティウス11 QUICK', 'フォルティウス30 CONTROL', 'フォルティウス30 POWER'],
+      models: ['フォルティウス TOUR', 'フォルティウス POWER', 'フォルティウス SPEED'],
     },
     {
       group: 'フォルティウス（廃番）',
-      models: ['フォルティウス10 POWER', 'フォルティウス10 QUICK', 'フォルティウス TOUR', 'フォルティウス TOUR-F'],
+      models: ['フォルティウス SUPER', 'フォルティウス'],
     },
     {
       group: 'アルティウス（現行）',
-      models: ['アルティウス03 CONTROL', 'アルティウス03 POWER'],
-    },
-    {
-      group: 'アルティウス（廃番）',
       models: [
         'アルティウス01 SPEED', 'アルティウス01 FEEL', 'アルティウス01 SONIC',
         'アルティウス TOUR', 'アルティウス TOUR-J',
@@ -398,57 +371,40 @@ const RACKET_MODEL_GROUPS = {
     },
     {
       group: 'GRAVITAS（グラビタス・現行）',
-      models: ['GRAVITAS 9.5-SX', 'GRAVITAS 9.0-SX C.L.'],
+      models: ['グラビタス SIGMA', 'グラビタス CORE', 'グラビタス GRAVITY'],
     },
     {
       group: 'GRAVITAS（廃番）',
-      models: ['GRAVITAS 8.0-SX', 'GRAVITAS 7.5-SR', 'GRAVITAS 7.0-SR', 'GRAVITAS 6.5-LL', 'GRAVITAS 6.0-LA'],
+      models: ['グラビタス EXTRA'],
     },
     {
       group: 'COCYTUS（コキュートス・現行）',
-      models: ['COCYTUS KRONOS', 'COCYTUS RHEA', 'COCYTUS ARES'],
+      models: ['コキュートス EX', 'コキュートス CORE', 'コキュートス PRO'],
     },
     {
-      group: 'COCYTUS（廃番）',
-      models: ['COCYTUS BLADE', 'COCYTUS ICE', 'COCYTUS SLASH', 'COCYTUS EDGE'],
-    },
-    {
-      group: '凌駕（RYOGA）',
-      models: ['凌駕 MUGEN（無限）2024 JP ver', '凌駕 Ougi（桜花）', '凌駕 Shiden（紫電）', '凌駕 Tenbu（天舞）', '凌駕 Issen（一閃）'],
+      group: 'RYOGA（凌駕）',
+      models: ['凌駕 REG', '凌駕', '凌駕02'],
     },
     {
       group: 'CUSTOMEDGE（廃番）',
-      models: [
-        'CUSTOMEDGE Ver.3.0 TYPE-E JP ver', 'CUSTOMEDGE Ver.3.0 Flex-R', 'CUSTOMEDGE Ver.3.0 Flex-L',
-        'CUSTOMEDGE Ver.3.0 Flex-A', 'CUSTOMEDGE Ver.3.0 Flex-S',
-        'CUSTOMEDGE Ver.2.0 TYPE K', 'CUSTOMEDGE Ver.2.0 TYPE S JP ver',
-        'CUSTOMEDGE Ver.2.0 TYPE V', 'CUSTOMEDGE Ver.2.0 TYPE X', 'CUSTOMEDGE Ver.2.0 TYPE Z',
-        'CUSTOMEDGE Ver.1.0 TYPE S', 'CUSTOMEDGE Ver.1.0 TYPE V',
-        'CUSTOMEDGE Ver.1.0 TYPE X', 'CUSTOMEDGE Ver.1.0 TYPE Z',
-        'CUSTOMEDGE PS FLEX A (RED)', 'CUSTOMEDGE PS FLEX L (WHITE)',
-      ],
+      models: ['カスタムエッジ', 'カスタムエッジ SPECIAL'],
     },
     {
       group: 'ROOTS（廃番）',
-      models: ['ROOTS Aermet 6000 Pro', 'ROOTS Aermet Zeus', 'ROOTS 3000R', 'ROOTS Gavun 1300', 'ROOTS Smash 78R', 'ROOTS TJ YANG', 'ROOTS TJ YIN'],
+      models: ['ルーツ', 'ルーツ PRO'],
     },
     {
       group: 'LEGENDARY（現行）',
-      models: ['LEGENDARY 50', 'LEGENDARY 30', 'LEGENDARY 10'],
+      models: ['レジェンダリー', 'レジェンダリー PRO'],
     },
     {
       group: 'その他・レガシー',
-      models: [
-        'GUNGNIR 07R', 'GUNGNIR 08S', 'GUNGNIR ベータ', 'GUNGNIR アルファ',
-        'TRIVISTA 800', 'TRIVISTA Lambda', 'GRAFEATHER M1', 'Mira Drive', 'GRAPOWER 900', 'その他',
-      ],
+      models: ['その他'],
     },
   ],
 }
 
-// ---- ストリング（ブランド → シリーズ → 製品） ----
-const STRING_BRAND_ORDER = ['YONEX', 'VICTOR', 'GOSEN', 'MIZUNO', 'LI-NING', 'Ashaway']
-
+// ---- ストリング（ブランド→シリーズ→モデル） ----
 const STRING_TYPE_GROUPS = {
   'YONEX': [
     { series: 'エクスボルト', strings: ['エクスボルト63', 'エクスボルト65', 'エクスボルト68'] },
@@ -483,28 +439,26 @@ const WEEKLY_FREQ_OPTIONS = [
   { value: 6, label: '週6回以上', recommendedDays: 14 },
 ]
 
-// ---- ヘルパー: 既存データからシリーズ・ストリング情報を逆引き ----
-function findModelSeries(brand, modelName) {
-  const groups = RACKET_MODEL_GROUPS[brand] ?? []
-  return groups.find(g => g.models.includes(modelName))?.group ?? ''
-}
-
-function findStringBrand(modelName) {
-  for (const brand of STRING_BRAND_ORDER) {
-    for (const s of STRING_TYPE_GROUPS[brand]) {
-      if (s.strings.includes(modelName)) return brand
+// Build flat string lists from nested data for optgroups
+function buildStringOptions() {
+  const options = []
+  for (const brand of Object.keys(STRING_TYPE_GROUPS)) {
+    const series = STRING_TYPE_GROUPS[brand]
+    for (const s of series) {
+      for (const str of s.strings) {
+        options.push({ label: str, brand, series: s.series })
+      }
     }
   }
-  return ''
+  return options
 }
 
-function findStringSeries(brand, modelName) {
-  const series = STRING_TYPE_GROUPS[brand] ?? []
-  return series.find(s => s.strings.includes(modelName))?.series ?? ''
-}
+const STRING_OPTIONS = buildStringOptions()
 
 const DEFAULT_FORM = {
   brand: '',
+  name: '',
+  stringType: '',
   stringDate: new Date().toISOString().slice(0, 10),
   tension: '',
   replacementDays: 90,
@@ -515,6 +469,8 @@ const DEFAULT_FORM = {
 export default function RacketForm({ initial, onSave, onCancel }) {
   const [form, setForm] = useState(initial ? {
     brand: initial.brand ?? '',
+    name: initial.name ?? '',
+    stringType: initial.stringType ?? '',
     stringDate: initial.stringDate ?? DEFAULT_FORM.stringDate,
     tension: initial.tension ?? '',
     replacementDays: initial.replacementDays ?? 90,
@@ -522,80 +478,23 @@ export default function RacketForm({ initial, onSave, onCancel }) {
     memo: initial.memo ?? '',
   } : DEFAULT_FORM)
 
-  // ラケット名：シリーズ → モデル
-  const [racketSeries, setRacketSeries] = useState(() =>
-    initial?.name && initial?.brand ? findModelSeries(initial.brand, initial.name) : ''
-  )
-  const [racketModel, setRacketModel] = useState(() => {
-    if (!initial?.name) return { select: '', custom: '' }
-    const allModels = (RACKET_MODEL_GROUPS[initial.brand ?? ''] ?? []).flatMap(g => g.models)
-    return allModels.includes(initial.name)
-      ? { select: initial.name, custom: '' }
-      : { select: 'その他', custom: initial.name }
-  })
-
-  // ストリング：ブランド → シリーズ → 製品
-  const [stringBrand, setStringBrand] = useState(() =>
-    initial?.stringType ? findStringBrand(initial.stringType) : ''
-  )
-  const [stringSeries, setStringSeries] = useState(() => {
-    if (!initial?.stringType) return ''
-    const brand = findStringBrand(initial.stringType)
-    return brand ? findStringSeries(brand, initial.stringType) : ''
-  })
-  const [stringModel, setStringModel] = useState(() => {
-    if (!initial?.stringType) return { select: '', custom: '' }
-    const allStrings = Object.values(STRING_TYPE_GROUPS).flatMap(s => s.flatMap(g => g.strings))
-    return allStrings.includes(initial.stringType)
-      ? { select: initial.stringType, custom: '' }
-      : { select: 'その他', custom: initial.stringType }
-  })
-
   function set(key, value) {
     setForm(prev => ({ ...prev, [key]: value }))
   }
 
-  function handleBrandChange(brand) {
-    set('brand', brand)
-    setRacketSeries('')
-    setRacketModel({ select: '', custom: '' })
-  }
-
-  function handleSeriesChange(series) {
-    setRacketSeries(series)
-    setRacketModel({ select: '', custom: '' })
-  }
-
-  function handleStringBrandChange(brand) {
-    setStringBrand(brand)
-    setStringSeries('')
-    setStringModel({ select: '', custom: '' })
-  }
-
-  function handleStringSeriesChange(series) {
-    setStringSeries(series)
-    setStringModel({ select: '', custom: '' })
-  }
-
   function handleSubmit(e) {
     e.preventDefault()
-    const resolvedName = racketModel.select === 'その他' ? racketModel.custom : racketModel.select
-    const resolvedString = stringModel.select === 'その他' ? stringModel.custom : stringModel.select
-    if (!resolvedName?.trim()) return
+    if (!form.name?.trim()) return
     onSave({
       ...form,
-      name: resolvedName,
-      stringType: resolvedString,
       tension: form.tension ? Number(form.tension) : null,
       replacementDays: form.replacementDays ? Number(form.replacementDays) : null,
       weeklyFreq: Number(form.weeklyFreq),
     })
   }
 
-  const seriesGroups = RACKET_MODEL_GROUPS[form.brand] ?? null
-  const selectedSeriesModels = seriesGroups?.find(g => g.group === racketSeries)?.models ?? []
-  const stringSeriesList = STRING_TYPE_GROUPS[stringBrand] ?? []
-  const selectedStringModels = stringSeriesList.find(s => s.series === stringSeries)?.strings ?? []
+  // Get model options for selected brand
+  const brandModels = form.brand ? RACKET_MODEL_GROUPS[form.brand] ?? [] : []
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -613,100 +512,63 @@ export default function RacketForm({ initial, onSave, onCancel }) {
 
           {/* ブランド */}
           <Field label="ブランド">
-            <select value={form.brand} onChange={e => handleBrandChange(e.target.value)} className="input">
+            <select value={form.brand} onChange={e => set('brand', e.target.value)} className="input">
               <option value="">選択してください</option>
               {RACKET_BRANDS.map(b => <option key={b} value={b}>{b}</option>)}
             </select>
           </Field>
 
-          {/* ラケット名：シリーズ → モデル */}
-          {seriesGroups ? (
-            <>
-              <Field label="シリーズ">
-                <select value={racketSeries} onChange={e => handleSeriesChange(e.target.value)} className="input">
-                  <option value="">シリーズを選択してください</option>
-                  {seriesGroups.map(g => <option key={g.group} value={g.group}>{g.group}</option>)}
-                  <option value="その他">その他（直接入力）</option>
-                </select>
-              </Field>
-
-              {racketSeries && racketSeries !== 'その他' && (
-                <Field label="ラケット名 *">
-                  <select
-                    value={racketModel.select}
-                    onChange={e => setRacketModel({ select: e.target.value, custom: '' })}
-                    className="input"
-                  >
-                    <option value="">モデルを選択してください</option>
-                    {selectedSeriesModels.map(m => <option key={m} value={m}>{m}</option>)}
-                  </select>
-                </Field>
-              )}
-
-              {racketSeries === 'その他' && (
-                <Field label="ラケット名 *">
-                  <input
-                    type="text"
-                    required
-                    placeholder="例: アストロクス99 PRO"
-                    value={racketModel.custom}
-                    onChange={e => setRacketModel({ select: 'その他', custom: e.target.value })}
-                    className="input"
-                  />
-                </Field>
-              )}
-            </>
-          ) : (
-            <Field label="ラケット名 *">
+          {/* ラケット名 */}
+          <Field label="ラケット名 *">
+            {form.brand && brandModels.length > 0 ? (
+              <select value={form.name} onChange={e => set('name', e.target.value)} className="input">
+                <option value="">選択してください</option>
+                {brandModels.map(group => (
+                  <optgroup key={group.group} label={group.group}>
+                    {group.models.map(model => (
+                      <option key={model} value={model}>{model}</option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            ) : (
               <input
                 type="text"
                 required
                 placeholder="例: アストロクス99 PRO"
-                value={racketModel.custom}
-                onChange={e => setRacketModel({ select: 'その他', custom: e.target.value })}
+                value={form.name}
+                onChange={e => set('name', e.target.value)}
                 className="input"
               />
-            </Field>
-          )}
+            )}
+          </Field>
 
-          {/* ストリング：ブランド → シリーズ → 製品 */}
-          <Field label="ストリングのブランド">
-            <select value={stringBrand} onChange={e => handleStringBrandChange(e.target.value)} className="input">
+          {/* ストリング */}
+          <Field label="ストリングの種類">
+            <select value={form.stringType} onChange={e => set('stringType', e.target.value)} className="input">
               <option value="">選択してください</option>
-              {STRING_BRAND_ORDER.map(b => <option key={b} value={b}>{b}</option>)}
-              <option value="その他">その他（直接入力）</option>
+              {['YONEX', 'VICTOR', 'GOSEN', 'MIZUNO', 'LI-NING', 'Ashaway'].map(brand => (
+                <optgroup key={brand} label={brand}>
+                  {STRING_TYPE_GROUPS[brand]?.map(series =>
+                    series.strings.map(str => (
+                      <option key={str} value={str}>{series.series} / {str}</option>
+                    ))
+                  )}
+                </optgroup>
+              ))}
+              <optgroup label="その他">
+                <option value="">直接入力...</option>
+              </optgroup>
             </select>
           </Field>
 
-          {stringBrand && stringBrand !== 'その他' && stringSeriesList.length > 0 && (
-            <Field label="ストリングのシリーズ">
-              <select value={stringSeries} onChange={e => handleStringSeriesChange(e.target.value)} className="input">
-                <option value="">シリーズを選択してください</option>
-                {stringSeriesList.map(s => <option key={s.series} value={s.series}>{s.series}</option>)}
-              </select>
-            </Field>
-          )}
-
-          {stringSeries && selectedStringModels.length > 0 && (
-            <Field label="ストリングの種類">
-              <select
-                value={stringModel.select}
-                onChange={e => setStringModel({ select: e.target.value, custom: '' })}
-                className="input"
-              >
-                <option value="">ストリングを選択してください</option>
-                {selectedStringModels.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-            </Field>
-          )}
-
-          {stringBrand === 'その他' && (
-            <Field label="ストリングの種類">
+          {form.stringType === '' && form.stringType !== undefined && (
+            <Field label="ストリング名を入力">
               <input
                 type="text"
-                placeholder="ストリング名を入力"
-                value={stringModel.custom}
-                onChange={e => setStringModel({ select: 'その他', custom: e.target.value })}
+                placeholder="ストリング名"
+                value={form.stringType}
+                onChange={e => set('stringType', e.target.value)}
                 className="input"
               />
             </Field>
