@@ -58,7 +58,7 @@ export default function HelpModal({ onClose }) {
           </Section>
 
           {/* Section 3 */}
-          <Section title="③ 湿度補正" badge="−0.02 lbs / %">
+          <Section title="④ 湿度補正" badge="−0.02 lbs / %RH">
             <p className="leading-relaxed">
               ナイロン66（ストリングの主材料）は高湿度環境で
               <span className="font-medium">吸水率が3〜5%増加</span>します。
@@ -117,7 +117,8 @@ export default function HelpModal({ onClose }) {
             <p className="font-semibold text-amber-800">⚠️ モデルの限界</p>
             <ul className="list-disc list-inside space-y-1 text-amber-700 leading-relaxed">
               <li>精度は <span className="font-medium">±1〜2 lbs 程度</span> の目安です</li>
-<li>ポリ・ナチュラルガット系は補正係数が異なります</li>
+              <li>使用頻度は週単位の平均で推定しており、セッションの強度は未反映です</li>
+              <li>ポリ・ナチュラルガット系は補正係数が異なります</li>
               <li>張り方・マシンの違いによる個体差があります</li>
               <li>厳密な管理にはテンションゲージによる実測を推奨します</li>
             </ul>

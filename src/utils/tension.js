@@ -61,7 +61,8 @@ function humidCorrection(avgHumid) {
  * micro-abrasion and stress cycling. Estimated at -0.02 lbs per session.
  */
 function usageCorrection(weeklyFreq, days) {
-  const sessions = (weeklyFreq ?? 2) * (days / 7)
+  if (!weeklyFreq || weeklyFreq <= 0) return 0
+  const sessions = weeklyFreq * (days / 7)
   return -sessions * 0.02
 }
 
@@ -105,15 +106,15 @@ export function getTensionBreakdown(initialTension, stringDate, currentTemp, cur
   const days = differenceInDays(new Date(), parseISO(stringDate))
   const avgTemp = calcMonthlyWeightedAvg(stringDate, OKINAWA_MONTHLY_AVG_TEMP)
   const avgHumid = calcMonthlyWeightedAvg(stringDate, OKINAWA_MONTHLY_AVG_HUMID)
-  const sessions = Math.round((weeklyFreq ?? 2) * (days / 7))
+  const sessions = weeklyFreq > 0 ? Math.round(weeklyFreq * (days / 7)) : 0
   return {
     days,
     avgTemp: Math.round(avgTemp * 10) / 10,
     avgHumid: Math.round(avgHumid),
     tempLoss: Math.round(tempCorrection(avgTemp) * 10) / 10,
     humidLoss: Math.round(humidCorrection(avgHumid) * 10) / 10,
-    usageLoss: Math.round(usageCorrection(weeklyFreq, days) * 10) / 10,
     sessions,
+    usageLoss: Math.round(usageCorrection(weeklyFreq, days) * 10) / 10,
   }
 }
 
