@@ -1,51 +1,75 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 
-// ---- ブランド ----
+// ---- ブランド（公式表記） ----
 const RACKET_BRANDS = [
   'YONEX', 'ミズノ', 'ゴーセン', 'Victor', 'Li-Ning',
-  'アパックス', 'バボラ', 'FORZA', 'Kumpoo', 'その他',
+  'アパックス', 'Babolat', 'FORZA', 'Kumpoo', 'その他',
 ]
 
-// ---- ラケットモデル（シリーズ別グループ） ----
+// ---- ラケットモデル（シリーズ別・公式表記） ----
 const RACKET_MODEL_GROUPS = {
   'YONEX': [
     {
       group: 'アストロクス',
       models: [
-        'アストロクス88D PRO', 'アストロクス88D TOUR', 'アストロクス88D GAME', 'アストロクス88D PLAY',
-        'アストロクス88S PRO', 'アストロクス88S TOUR', 'アストロクス88S GAME', 'アストロクス88S PLAY',
-        'アストロクス99 PRO', 'アストロクス99 TOUR', 'アストロクス99 GAME', 'アストロクス99 PLAY',
-        'アストロクス77 PRO', 'アストロクス77 TOUR', 'アストロクス77 GAME', 'アストロクス77 PLAY',
-        'アストロクス55',
-        'アストロクス38D', 'アストロクス38S',
-        'アストロクス22 PRO', 'アストロクス22 TOUR', 'アストロクス22 GAME', 'アストロクス22 PLAY',
-        'アストロクス7DG', 'アストロクス1DG',
+        'アストロクス100ZZ',
+        'アストロクス100TOUR',
+        'アストロクス100GAME',
+        'アストロクス99 PRO',
+        'アストロクス99 TOUR',
+        'アストロクス99 GAME',
+        'アストロクス88D PRO',
+        'アストロクス88D TOUR',
+        'アストロクス88D GAME',
+        'アストロクス88S PRO',
+        'アストロクス88S TOUR',
+        'アストロクス88S GAME',
+        'アストロクス77 PRO',
+        'アストロクス77 TOUR',
+        'アストロクス77 GAME',
+        'アストロクス22 PRO',
+        'アストロクス22 GAME',
+        'アストロクス7DG',
+        'アストロクス Nextage',
       ],
     },
     {
       group: 'アークセイバー',
       models: [
-        'アークセイバー11 PRO', 'アークセイバー11 TOUR', 'アークセイバー11 GAME', 'アークセイバー11 PLAY',
-        'アークセイバー7 PRO', 'アークセイバー7 TOUR', 'アークセイバー7 GAME', 'アークセイバー7 PLAY',
+        'アークセイバー11 PRO',
+        'アークセイバー11 TOUR',
+        'アークセイバー7 PRO',
+        'アークセイバー7 TOUR',
+        'アークセイバー3',
+        'アークセイバー1',
       ],
     },
     {
       group: 'ナノフレア',
       models: [
         'ナノフレア1000Z',
+        'ナノフレア1000 TOUR',
         'ナノフレア1000 GAME',
-        'ナノフレア800 PRO', 'ナノフレア800 TOUR', 'ナノフレア800 GAME', 'ナノフレア800 PLAY',
-        'ナノフレア700',
+        'ナノフレア800 PRO',
+        'ナノフレア800 GAME',
+        'ナノフレア700 PRO',
+        'ナノフレア700 TOUR',
+        'ナノフレア700 GAME',
         'ナノフレア600',
+        'ナノフレア380',
         'ナノフレア370スピード',
-        'ナノフレア270スピード',
+        'ナノフレア300',
+        'ナノフレア200',
       ],
     },
     {
-      group: 'デュオラ',
+      group: 'マッスルパワー',
       models: [
-        'デュオラ10 LT', 'デュオラZストライク',
+        'マッスルパワー6 LONG',
+        'マッスルパワー3',
+        'マッスルパワー2',
+        'マッスルパワー1',
       ],
     },
     {
@@ -53,19 +77,102 @@ const RACKET_MODEL_GROUPS = {
       models: ['その他'],
     },
   ],
-  'ミズノ': [
+
+  'Victor': [
     {
-      group: 'フォルティウス',
+      group: 'AURASPEED（オーラスピード）',
       models: [
-        'フォルティウス80', 'フォルティウス70', 'フォルティウス60',
-        'フォルティウス70ストライク', 'フォルティウス60パワー',
+        'AURASPEED FANTÔME',
+        'AURASPEED HS PLUS',
+        'AURASPEED 100X H',
+        'AURASPEED 90K',
+        'AURASPEED 90K Metallic',
+        'AURASPEED 90S',
+        'AURASPEED Panther',
+        'AURASPEED Light Fighter 80 A',
+        'AURASPEED Light Fighter 40 D',
+        'AURASPEED 33H',
       ],
     },
+    {
+      group: 'THRUSTER K（スラスターK）',
+      models: [
+        'THRUSTER K RYUGA II PRO',
+        'THRUSTER K RYUGA Metallic',
+        'THRUSTER K F CLAW ULTRA X',
+        'THRUSTER K F',
+        'THRUSTER K 15 Light',
+        'THRUSTER K 7U',
+        'THRUSTER Light Fighter 30 F',
+      ],
+    },
+    {
+      group: 'DRIVE X（ドライブX）',
+      models: [
+        'DRIVE X 9X',
+        'DRIVE X 12',
+        'DRIVE X 1 Light',
+      ],
+    },
+    {
+      group: 'BRAVE SWORD（ブレイブソード）',
+      models: [
+        'BRAVE SWORD 12 SE',
+        'BRAVE SWORD 12',
+      ],
+    },
+    {
+      group: 'JETSPEED（ジェットスピード）',
+      models: [
+        'JETSPEED S 12 ii F',
+        'JETSPEED S 12 F',
+      ],
+    },
+    {
+      group: 'その他',
+      models: ['その他'],
+    },
+  ],
+
+  'ミズノ': [
     {
       group: 'アルティウス',
       models: [
-        'アルティウス01スピード', 'アルティウス01フィール',
-        'アルティウス01コンビ',
+        'アルティウス 01 フィール',
+        'アルティウス 01 スピード',
+        'アルティウス 02 ソレア',
+        'アルティウス 03 フィール',
+        'アルティウス J1 フォワード',
+        'アルティウス ソニック',
+      ],
+    },
+    {
+      group: 'フォルティウス',
+      models: [
+        'フォルティウス 11 クイック',
+        'フォルティウス 11 パワー',
+        'フォルティウス 20',
+        'フォルティウス 60',
+      ],
+    },
+    {
+      group: 'アクロスピード',
+      models: [
+        'アクロスピード 1 アクセル',
+        'アクロスピード 1 ドライブ',
+        'アクロスピード 1 フォーカス',
+        'アクロスピード 3',
+        'アクロスピード 7',
+        'アクロスピード 8',
+      ],
+    },
+    {
+      group: 'アクロフォース',
+      models: [
+        'アクロフォース 100',
+        'アクロフォース 200',
+        'アクロフォース 300',
+        'アクロフォース 600',
       ],
     },
     {
@@ -73,11 +180,31 @@ const RACKET_MODEL_GROUPS = {
       models: ['その他'],
     },
   ],
+
   'ゴーセン': [
     {
-      group: 'カルフォルニア',
+      group: 'INFERNO（インフェルノ）',
       models: [
-        'カルフォルニア CX S', 'カルフォルニア CX F', 'カルフォルニア CX P',
+        'インフェルノ エアー +CORE',
+        'インフェルノ スマート +CORE',
+        'インフェルノ レイド',
+        'インフェルノ タッチ',
+        'インフェルノ ライト',
+      ],
+    },
+    {
+      group: '凌駕（RYOGA）',
+      models: [
+        '凌駕 無双',
+        '凌駕 無限',
+      ],
+    },
+    {
+      group: 'GRAVITAS（グラビタス）',
+      models: [
+        'GRAVITAS 1.9-A',
+        'GRAVITAS 2.3R',
+        'GRAVITAS 6.5-LL',
       ],
     },
     {
@@ -85,50 +212,51 @@ const RACKET_MODEL_GROUPS = {
       models: ['その他'],
     },
   ],
-  'Victor': [
-    {
-      group: 'BLADE X',
-      models: [
-        'BLADE X', 'BLADE X FlexR',
-      ],
-    },
-    {
-      group: 'HYPERNANO X',
-      models: [
-        'HYPERNANO X 900 TOUR', 'HYPERNANO X 900', 'HYPERNANO X 800',
-      ],
-    },
-    {
-      group: 'THRUSTER',
-      models: [
-        'THRUSTER RYUGA II PRO', 'THRUSTER K 12', 'THRUSTER K 12M',
-      ],
-    },
-    {
-      group: 'JETSPEED',
-      models: [
-        'JETSPEED S 12 II', 'JETSPEED S 12',
-      ],
-    },
-    {
-      group: 'AURASPEED',
-      models: [
-        'AURASPEED 100X', 'AURASPEED 90K',
-      ],
-    },
-    {
-      group: 'その他',
-      models: ['その他'],
-    },
-  ],
+
   'Li-Ning': [
     {
-      group: 'TB NANO',
-      models: ['TB NANO', 'TB NANO 2', 'TB NANO LIGHT'],
+      group: 'AXFORCE（雷霆）',
+      models: [
+        'AXFORCE 100',
+        'AXFORCE 90 NEW',
+        'AXFORCE 80',
+        'AXFORCE 70',
+        'AXFORCE 60',
+        'AXFORCE BIGBANG NEW',
+      ],
+    },
+    {
+      group: 'HALBERTEC',
+      models: [
+        'HALBERTEC 9000',
+        'HALBERTEC 9000 POWER',
+        'HALBERTEC 8000',
+        'HALBERTEC 7000',
+      ],
+    },
+    {
+      group: 'BLADEX',
+      models: [
+        'BLADEX 900 SUN MAX',
+        'BLADEX 900 MOON MAX',
+        'BLADEX 700',
+        'BLADEX 73L',
+      ],
+    },
+    {
+      group: 'WINDSTORM',
+      models: [
+        'WINDSTORM 79H',
+        'WINDSTORM 74',
+        'WINDSTORM 72S',
+        'WINDSTORM 72',
+      ],
     },
     {
       group: 'AERONAUT',
-      models: ['AERONAUT 9000D', 'AERONAUT 9000C', 'AERONAUT 7000'],
+      models: [
+        'AERONAUT 9000C',
+      ],
     },
     {
       group: 'その他',
@@ -137,7 +265,7 @@ const RACKET_MODEL_GROUPS = {
   ],
 }
 
-// ---- ストリング（ブランド別グループ） ----
+// ---- ストリング（ブランド別グループ・公式表記） ----
 const STRING_TYPE_GROUPS = [
   {
     group: 'YONEX',
