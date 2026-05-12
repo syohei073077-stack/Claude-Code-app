@@ -591,7 +591,7 @@ export default function RacketForm({ initial, onSave, onCancel }) {
             )}
           </Field>
 
-          <Field label="張った日にち">
+          <Field label="ストリング張った日">
             <input
               type="date"
               value={form.stringDate}
