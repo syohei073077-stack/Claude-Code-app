@@ -2,20 +2,117 @@ import { useState } from 'react'
 import { X } from 'lucide-react'
 
 const RACKET_BRANDS = [
-  'Yonex', 'Victor', 'Li-Ning', 'Babolat', 'Carlton', 'Ashaway', 'Forza', 'その他',
+  'Yonex', 'ミズノ', 'ゴーセン', 'Victor', 'Li-Ning',
+  'アパックス', 'バボラ', 'Forza', 'Kumpoo', 'その他',
 ]
 
-const RACKET_TYPES = [
-  '攻撃型', 'オールラウンド型', '守備型', 'コントロール型',
-]
+const RACKET_MODELS = {
+  'Yonex': [
+    'アストロクス88D PRO',
+    'アストロクス88S PRO',
+    'アストロクス99 PRO',
+    'アストロクス99 GAME',
+    'アストロクス77 PRO',
+    'アストロクス77 GAME',
+    'アストロクス55',
+    'アストロクス22 PRO',
+    'アストロクス22',
+    'ナノフレア1000Z',
+    'ナノフレア1000ゲーム',
+    'ナノフレア800PRO',
+    'ナノフレア800',
+    'ナノフレア800ゲーム',
+    'ナノフレア700',
+    'ナノフレア600',
+    'ナノフレア370スピード',
+    'アークセイバー11PRO',
+    'アークセイバー7PRO',
+    'デュオラ10',
+    'その他',
+  ],
+  'ミズノ': [
+    'フォルティウス80',
+    'フォルティウス70',
+    'フォルティウス60',
+    'アルティウス01スピード',
+    'アルティウス01フィール',
+    'その他',
+  ],
+  'ゴーセン': [
+    'カルフォルニア CX S',
+    'カルフォルニア CX F',
+    'カルフォルニア CX P',
+    'その他',
+  ],
+  'Victor': [
+    'ブレイドX',
+    'スペクトラ10Q',
+    'スペクトラ9X',
+    'ハイパーナノX900',
+    'ハイパーナノX800',
+    'スレッシャー',
+    'その他',
+  ],
+  'Li-Ning': [
+    'TB ナノ',
+    'ハーモニカ',
+    'バウンド',
+    'その他',
+  ],
+  'アパックス': [
+    'アパックス スーパーシリーズ',
+    'その他',
+  ],
+  'バボラ': [
+    'サトリ ライト',
+    'サトリ エクスセル',
+    'その他',
+  ],
+  'Forza': [
+    'パワーブレード 1000',
+    'パワーブレード 900',
+    'その他',
+  ],
+  'Kumpoo': [
+    'K520',
+    'K530',
+    'その他',
+  ],
+}
 
 const STRING_TYPES = [
-  'Yonex BG65', 'Yonex BG65Ti', 'Yonex BG80', 'Yonex BG80 Power',
-  'Yonex Aerobite', 'Yonex Aerobite Boost',
-  'Yonex Nanogy 95', 'Yonex Nanogy 98', 'Yonex Nanogy 99',
-  'Victor VS-850', 'Victor VBS-66N', 'Victor VBS-70',
-  'Li-Ning No.1', 'Li-Ning No.5',
-  'Ashaway Zymax 66 Fire', 'Ashaway Zymax 68 TX',
+  // Yonex
+  'ヨネックス BG65',
+  'ヨネックス BG65チタン',
+  'ヨネックス BG66',
+  'ヨネックス BG66フォース',
+  'ヨネックス BG66アルティマックス',
+  'ヨネックス BG80',
+  'ヨネックス BG80パワー',
+  'ヨネックス エアロバイト',
+  'ヨネックス エアロバイトブースト',
+  'ヨネックス ナノジー95',
+  'ヨネックス ナノジー98',
+  'ヨネックス ナノジー99',
+  'ヨネックス ナノジー99アセス',
+  'ヨネックス エクスボルト63',
+  'ヨネックス エクスボルト65',
+  'ヨネックス エクスボルト66',
+  // Victor
+  'ビクター VBS-66ナノ',
+  'ビクター VBS-70',
+  'ビクター VS-850',
+  // Gosen
+  'ゴーセン エッグパワー61',
+  'ゴーセン エッグパワー63',
+  'ゴーセン BM',
+  // Li-Ning
+  'リーニン ナンバー1',
+  'リーニン ナンバー5',
+  // Ashaway
+  'アシュアウェイ ジーマックス66ファイア',
+  'アシュアウェイ ジーマックス68TX',
+  // その他
   'その他',
 ]
 
@@ -28,16 +125,14 @@ const WEEKLY_FREQ_OPTIONS = [
   { value: 6, label: '週6回以上' },
 ]
 
-function initStringType(value) {
+function initSelect(value, options) {
   if (!value) return { select: '', custom: '' }
-  if (STRING_TYPES.includes(value)) return { select: value, custom: '' }
+  if (options.includes(value)) return { select: value, custom: '' }
   return { select: 'その他', custom: value }
 }
 
 const DEFAULT_FORM = {
   brand: '',
-  name: '',
-  racketType: '',
   stringDate: new Date().toISOString().slice(0, 10),
   tension: '',
   replacementDays: 90,
@@ -48,8 +143,6 @@ const DEFAULT_FORM = {
 export default function RacketForm({ initial, onSave, onCancel }) {
   const [form, setForm] = useState(initial ? {
     brand: initial.brand ?? '',
-    name: initial.name ?? '',
-    racketType: initial.racketType ?? '',
     stringDate: initial.stringDate ?? DEFAULT_FORM.stringDate,
     tension: initial.tension ?? '',
     replacementDays: initial.replacementDays ?? 90,
@@ -57,21 +150,33 @@ export default function RacketForm({ initial, onSave, onCancel }) {
     memo: initial.memo ?? '',
   } : DEFAULT_FORM)
 
-  const [stringType, setStringType] = useState(() => initStringType(initial?.stringType ?? ''))
+  const modelOptions = RACKET_MODELS[form.brand] ?? []
+
+  const [racketName, setRacketName] = useState(() =>
+    initSelect(initial?.name ?? '', RACKET_MODELS[initial?.brand ?? ''] ?? [])
+  )
+  const [stringType, setStringType] = useState(() =>
+    initSelect(initial?.stringType ?? '', STRING_TYPES)
+  )
 
   function set(key, value) {
     setForm(prev => ({ ...prev, [key]: value }))
   }
 
+  function handleBrandChange(brand) {
+    set('brand', brand)
+    setRacketName({ select: '', custom: '' })
+  }
+
   function handleSubmit(e) {
     e.preventDefault()
-    if (!form.name.trim()) return
-    const resolvedStringType = stringType.select === 'その他'
-      ? stringType.custom
-      : stringType.select
+    const resolvedName = racketName.select === 'その他' ? racketName.custom : racketName.select
+    const resolvedString = stringType.select === 'その他' ? stringType.custom : stringType.select
+    if (!resolvedName.trim()) return
     onSave({
       ...form,
-      stringType: resolvedStringType,
+      name: resolvedName,
+      stringType: resolvedString,
       tension: form.tension ? Number(form.tension) : null,
       replacementDays: form.replacementDays ? Number(form.replacementDays) : null,
       weeklyFreq: Number(form.weeklyFreq),
@@ -91,10 +196,11 @@ export default function RacketForm({ initial, onSave, onCancel }) {
         </div>
 
         <form onSubmit={handleSubmit} className="px-6 py-5 flex flex-col gap-4">
+
           <Field label="ブランド">
             <select
               value={form.brand}
-              onChange={e => set('brand', e.target.value)}
+              onChange={e => handleBrandChange(e.target.value)}
               className="input"
             >
               <option value="">選択してください</option>
@@ -103,25 +209,38 @@ export default function RacketForm({ initial, onSave, onCancel }) {
           </Field>
 
           <Field label="ラケット名 *">
-            <input
-              type="text"
-              required
-              placeholder="例: Astrox 99"
-              value={form.name}
-              onChange={e => set('name', e.target.value)}
-              className="input"
-            />
-          </Field>
-
-          <Field label="ラケットの種類">
-            <select
-              value={form.racketType}
-              onChange={e => set('racketType', e.target.value)}
-              className="input"
-            >
-              <option value="">選択してください</option>
-              {RACKET_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
+            {modelOptions.length > 0 ? (
+              <>
+                <select
+                  value={racketName.select}
+                  onChange={e => setRacketName({ select: e.target.value, custom: '' })}
+                  className="input"
+                  required={racketName.select !== 'その他'}
+                >
+                  <option value="">選択してください</option>
+                  {modelOptions.map(m => <option key={m} value={m}>{m}</option>)}
+                </select>
+                {racketName.select === 'その他' && (
+                  <input
+                    type="text"
+                    required
+                    placeholder="モデル名を入力"
+                    value={racketName.custom}
+                    onChange={e => setRacketName(prev => ({ ...prev, custom: e.target.value }))}
+                    className="input mt-2"
+                  />
+                )}
+              </>
+            ) : (
+              <input
+                type="text"
+                required
+                placeholder="例: アストロクス99"
+                value={racketName.select === 'その他' ? racketName.custom : racketName.select}
+                onChange={e => setRacketName({ select: 'その他', custom: e.target.value })}
+                className="input"
+              />
+            )}
           </Field>
 
           <Field label="ストリングの種類">
