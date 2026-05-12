@@ -478,12 +478,12 @@ const ALL_MODELS = Object.values(RACKET_MODEL_GROUPS).flatMap(g => g.flatMap(s =
 const ALL_STRINGS = STRING_TYPE_GROUPS.flatMap(g => g.strings)
 
 const WEEKLY_FREQ_OPTIONS = [
-  { value: 1, label: '週1回' },
-  { value: 2, label: '週2回' },
-  { value: 3, label: '週3回' },
-  { value: 4, label: '週4回' },
-  { value: 5, label: '週5回' },
-  { value: 6, label: '週6回以上' },
+  { value: 1, label: '週1回',   recommendedDays: 90 },
+  { value: 2, label: '週2回',   recommendedDays: 60 },
+  { value: 3, label: '週3回',   recommendedDays: 45 },
+  { value: 4, label: '週4回',   recommendedDays: 30 },
+  { value: 5, label: '週5回',   recommendedDays: 21 },
+  { value: 6, label: '週6回以上', recommendedDays: 14 },
 ]
 
 function initSelect(value, allOptions) {
@@ -656,7 +656,15 @@ export default function RacketForm({ initial, onSave, onCancel }) {
           <Field label="バドミントンの頻度">
             <select
               value={form.weeklyFreq}
-              onChange={e => set('weeklyFreq', e.target.value)}
+              onChange={e => {
+                const freq = Number(e.target.value)
+                const opt = WEEKLY_FREQ_OPTIONS.find(o => o.value === freq)
+                setForm(prev => ({
+                  ...prev,
+                  weeklyFreq: freq,
+                  replacementDays: opt ? opt.recommendedDays : prev.replacementDays,
+                }))
+              }}
               className="input"
             >
               {WEEKLY_FREQ_OPTIONS.map(o => (
@@ -675,7 +683,9 @@ export default function RacketForm({ initial, onSave, onCancel }) {
               onChange={e => set('replacementDays', e.target.value)}
               className="input"
             />
-            <p className="text-xs text-gray-400 mt-1">※ 一般的な目安: 週1回プレー→ 90日、週3回→ 60日</p>
+            <p className="text-xs text-gray-400 mt-1">
+              ※ 頻度に応じた目安日数が自動入力されます（手動変更も可）
+            </p>
           </Field>
 
           <Field label="メモ">
