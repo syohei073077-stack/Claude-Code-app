@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ストーリー説明画像</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .story {
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+    }
+    @media (max-width: 1080px) {
+      .story {
+        width: 100%;
+        aspect-ratio: 9 / 16;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 p-4">
+  <!-- Story 1: タイトル -->
+  <div class="story bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 flex flex-col items-center justify-center text-white shadow-lg rounded-lg mb-8">
+    <div class="text-center px-10 space-y-8">
+      <div class="space-y-4">
+        <div class="text-8xl">🏸</div>
+        <h1 class="text-6xl font-black tracking-tight drop-shadow-lg">バドミントン<br>ストリング管理</h1>
+      </div>
+      <p class="text-3xl font-light opacity-90">いつ交換すればいい？<br>今のテンション、大丈夫？</p>
+      <div class="pt-8 border-t border-white/30 space-y-2">
+        <p class="text-lg font-medium opacity-75">一目でわかるアプリ</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story 2: 何ができるか -->
+  <div class="story bg-gradient-to-br from-emerald-50 to-blue-50 flex flex-col justify-center text-gray-800 shadow-lg rounded-lg mb-8 p-8">
+    <div class="space-y-12">
+      <h2 class="text-5xl font-black text-center">できること</h2>
+
+      <div class="space-y-8">
+        <div class="flex items-start gap-6">
+          <div class="text-5xl flex-shrink-0">📊</div>
+          <div>
+            <p class="text-3xl font-bold mb-2">テンション推移</p>
+            <p class="text-xl text-gray-600">張ったときから<br>今のテンションまで<br>自動計算</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-6">
+          <div class="text-5xl flex-shrink-0">📅</div>
+          <div>
+            <p class="text-3xl font-bold mb-2">交換時期がわかる</p>
+            <p class="text-xl text-gray-600">「あと何日？」<br>すぐにチェック</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-6">
+          <div class="text-5xl flex-shrink-0">🌡️</div>
+          <div>
+            <p class="text-3xl font-bold mb-2">気象補正</p>
+            <p class="text-xl text-gray-600">沖縄の気温・湿度で<br>テンション自動調整</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story 3: 使い方 -->
+  <div class="story bg-gradient-to-br from-orange-50 to-red-50 flex flex-col justify-center text-gray-800 shadow-lg rounded-lg mb-8 p-8">
+    <div class="space-y-10">
+      <h2 class="text-5xl font-black text-center">使い方</h2>
+
+      <div class="space-y-6">
+        <div class="bg-white rounded-3xl p-6 shadow-md">
+          <p class="text-2xl font-bold text-orange-600 mb-2">1️⃣</p>
+          <p class="text-2xl font-semibold">ラケット情報を入力</p>
+          <p class="text-lg text-gray-600">ブランド、モデル、<br>張った日、テンション</p>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 shadow-md">
+          <p class="text-2xl font-bold text-orange-600 mb-2">2️⃣</p>
+          <p class="text-2xl font-semibold">自動で計算される</p>
+          <p class="text-lg text-gray-600">気象データを使った<br>リアルタイム推移</p>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 shadow-md">
+          <p class="text-2xl font-bold text-orange-600 mb-2">3️⃣</p>
+          <p class="text-2xl font-semibold">チェックして交換！</p>
+          <p class="text-lg text-gray-600">目安を参考に<br>タイミングを決める</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story 4: 機能紹介 -->
+  <div class="story bg-gradient-to-br from-indigo-600 to-purple-700 flex flex-col justify-center text-white shadow-lg rounded-lg mb-8 p-8">
+    <div class="space-y-12">
+      <h2 class="text-5xl font-black text-center drop-shadow-lg">スマートな計算</h2>
+
+      <div class="space-y-8 text-center">
+        <div>
+          <p class="text-6xl mb-3">⏰</p>
+          <p class="text-2xl font-bold">時間による劣化</p>
+          <p class="text-lg opacity-90">最初の7日で最大低下</p>
+        </div>
+
+        <div>
+          <p class="text-6xl mb-3">🌡️</p>
+          <p class="text-2xl font-bold">気温の影響</p>
+          <p class="text-lg opacity-90">沖縄の夏は特に注意</p>
+        </div>
+
+        <div>
+          <p class="text-6xl mb-3">💧</p>
+          <p class="text-2xl font-bold">湿度の影響</p>
+          <p class="text-lg opacity-90">梅雨〜夏はテンション低下</p>
+        </div>
+
+        <div>
+          <p class="text-6xl mb-3">🏸</p>
+          <p class="text-2xl font-bold">使用頻度の影響</p>
+          <p class="text-lg opacity-90">週の練習回数から推定</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story 5: シェア！ -->
+  <div class="story bg-gradient-to-br from-pink-500 via-rose-500 to-red-500 flex flex-col items-center justify-center text-white shadow-lg rounded-lg mb-8 p-8">
+    <div class="text-center space-y-12">
+      <div>
+        <p class="text-7xl mb-6">✨</p>
+        <h2 class="text-5xl font-black drop-shadow-lg">友達にシェア！</h2>
+      </div>
+
+      <div class="bg-white/20 backdrop-blur rounded-3xl p-8 space-y-4">
+        <p class="text-2xl font-bold">このアプリなら</p>
+        <p class="text-xl opacity-95">ラケット何個でも管理できる<br>複数ラケット対応<br>履歴も見られる</p>
+      </div>
+
+      <div class="space-y-4">
+        <p class="text-2xl font-semibold">URLを送るだけ！</p>
+        <p class="text-lg opacity-90">ブラウザから<br>いつでも使える</p>
+      </div>
+
+      <div class="pt-6 border-t border-white/40">
+        <p class="text-2xl font-black drop-shadow-lg">推しのラケットを<br>大事に使おう 💚</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
