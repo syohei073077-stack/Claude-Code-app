@@ -36,8 +36,12 @@ export default function RacketCard({ racket, onEdit, onDelete, weather }) {
     <div className={`bg-white rounded-2xl border-2 ${style.card} shadow-sm hover:shadow-md transition-shadow p-5 flex flex-col gap-4`}>
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
-          <h2 className="text-lg font-bold text-gray-900 truncate">{racket.name}</h2>
-          <p className="text-sm text-gray-500 truncate">{racket.stringType || '—'}</p>
+          <h2 className="text-lg font-bold text-gray-900 truncate">
+            {racket.brand ? `${racket.brand} ` : ''}{racket.name}
+          </h2>
+          <p className="text-sm text-gray-500 truncate">
+            {[racket.racketType, racket.stringType].filter(Boolean).join(' · ') || '—'}
+          </p>
         </div>
         <span className={`shrink-0 text-xs font-medium px-2 py-1 rounded-full border ${style.badge}`}>
           {style.label}
