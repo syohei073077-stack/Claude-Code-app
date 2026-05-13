@@ -2,6 +2,40 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 📌 Multi-Project Management Policy
+
+**重要**: 新規のアプリ開発は必ず「新しいグループ」として管理する。
+
+### 新規プロジェクト作成時の統一手順
+
+1. **GitHub リポジトリ** — 新しいリポジトリを作成 (`syohei073077-stack/[project-name]`)
+2. **Vercel プロジェクト** — 新しい Vercel プロジェクトをセットアップ
+3. **Claude Code Projects** — 同じグループ名で Projects に登録
+4. **CLAUDE.md** — 各リポジトリに配置してアーキテクチャ・コマンドを記載
+5. **チャット** — Projects グループ内で関連チャットを集約
+
+### 管理構成例
+
+```
+Claude Code / Projects
+├── badminton-string-tracker
+│   ├── GitHub: syohei073077-stack/badminton-string-tracker
+│   ├── Vercel: badminton-string-tracker.vercel.app
+│   └── Chat 1, 2, 3...
+│
+├── pricing-comparison-app
+│   ├── GitHub: syohei073077-stack/pricing-comparison-app
+│   ├── Vercel: pricing-comparison-app.vercel.app
+│   └── Chat 1, 2, 3...
+│
+└── [新プロジェクト]
+    ├── GitHub: syohei073077-stack/[project-name]
+    ├── Vercel: [project-name].vercel.app
+    └── Chat 1, 2, 3...
+```
+
+**これにより**: リポジトリ・デプロイ・チャットが 1:1:N で対応し、プロジェクト管理が明確になる。
+
 ## Commands
 
 ```bash
