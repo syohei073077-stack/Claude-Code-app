@@ -8,8 +8,59 @@ import RacketCard from './components/RacketCard'
 import RacketForm from './components/RacketForm'
 import NotificationBanner from './components/NotificationBanner'
 import HelpModal from './components/HelpModal'
+import SleepAnalyzer from './components/SleepAnalyzer'
 
 export default function App() {
+  const [tab, setTab] = useState('rackets')
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <TabBar tab={tab} onChange={setTab} />
+        {tab === 'rackets' ? <RacketsView /> : <SleepView />}
+      </div>
+    </div>
+  )
+}
+
+function TabBar({ tab, onChange }) {
+  const tabs = [
+    { key: 'rackets', label: '🏸 ストリング' },
+    { key: 'sleep', label: '😴 睡眠分析' },
+  ]
+  return (
+    <div className="flex gap-1 bg-white/70 border border-gray-100 rounded-2xl p-1 mb-6 shadow-sm">
+      {tabs.map((t) => (
+        <button
+          key={t.key}
+          onClick={() => onChange(t.key)}
+          className={`flex-1 text-sm font-medium py-2 rounded-xl transition-colors ${
+            tab === t.key ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-100'
+          }`}
+        >
+          {t.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function SleepView() {
+  return (
+    <div>
+      <header className="mb-6">
+        <div className="flex items-center gap-2">
+          <span className="text-2xl shrink-0">😴</span>
+          <h1 className="text-xl font-bold text-gray-900">睡眠分析</h1>
+        </div>
+        <p className="text-xs text-gray-500 ml-9 mt-1">スクショから睡眠スコアと改善アクションを自動算出（無料・端末内処理）</p>
+      </header>
+      <SleepAnalyzer />
+    </div>
+  )
+}
+
+function RacketsView() {
   const { rackets, addRacket, updateRacket, deleteRacket } = useRackets()
   const { permission, requestPermission, checkAndNotify } = useNotifications(rackets)
   const { weather, loading: weatherLoading, error: weatherError, updatedAt, refetch } = useOkinawaWeather()
@@ -49,8 +100,8 @@ export default function App() {
   }).length
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="max-w-2xl mx-auto px-4 py-8">
+    <>
+      <div>
         <header className="mb-6">
           <div className="flex items-center justify-between mb-1 gap-2">
             <div className="flex items-center gap-2 min-w-0">
@@ -130,7 +181,7 @@ export default function App() {
         />
       )}
       {showHelp && <HelpModal onClose={() => setShowHelp(false)} />}
-    </div>
+    </>
   )
 }
 
