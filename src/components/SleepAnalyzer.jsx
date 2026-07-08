@@ -84,13 +84,15 @@ export default function SleepAnalyzer() {
         rem: fields.remMin != null ? minToParts(fields.remMin) : f.rem,
         total: fields.totalMin != null ? minToParts(fields.totalMin) : f.total,
         awake: fields.awakeCount != null ? String(fields.awakeCount) : f.awake,
+        bedtime: fields.bedtime || f.bedtime,
+        waketime: fields.waketime || f.waketime,
       }))
       setOcrState({
         running: false,
         progress: 100,
         note:
           confidence === 'mid'
-            ? { type: 'ok', text: '読み取りました。数値が合っているか確認して、就寝時刻を入力してください。', clocks }
+            ? { type: 'ok', text: '読み取りました。数値と就寝・起床時刻が合っているか確認してください。', clocks }
             : { type: 'warn', text: 'うまく読み取れませんでした。下の欄に手入力してください。', clocks },
       })
     } catch {

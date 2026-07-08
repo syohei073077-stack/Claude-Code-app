@@ -38,9 +38,18 @@ export function parseSleepText(raw) {
   const awakeM = text.match(/(\d{1,2})\s*回/)
   if (awakeM) awakeCount = Number(awakeM[1])
 
-  // 就寝/起床の候補（hh:mm）。ノイズが多いので候補として返すのみ。
+  // 就寝/起床の候補（hh:mm）。
   const clocks = [...text.matchAll(/(\d{1,2}):(\d{2})/g)]
     .map((c) => `${c[1].padStart(2, '0')}:${c[2]}`)
+    .filter((c) => {
+      const [h, mm] = c.split(':').map(Number)
+      return h <= 23 && mm <= 59
+    })
+
+  // グラフ下の軸から就寝/起床を推定。
+  // 睡眠帯(18:00〜11:59)の時刻だけを対象にし、夕方はそのまま・深夜〜午前は+24して
+  // 連続時間軸に並べ、最小=就寝、最大=起床とする。日中の時計(ステータスバー等)は除外。
+  const { bedtime, waketime } = guessBedWake(clocks)
 
   // durations を順にマッピング（deep, light, rem, total）
   const [deepMin, lightMin, remMin, totalMin] = durations
@@ -50,11 +59,29 @@ export function parseSleepText(raw) {
   if (remMin != null) fields.remMin = remMin
   if (totalMin != null) fields.totalMin = totalMin
   if (awakeCount != null) fields.awakeCount = awakeCount
+  if (bedtime) fields.bedtime = bedtime
+  if (waketime) fields.waketime = waketime
 
   // 信頼度: 4つの時間＋回が揃えば mid、それ未満は low
   const confidence = durations.length >= 4 ? 'mid' : 'low'
 
   return { fields, confidence, clocks, rawText: raw }
+}
+
+function guessBedWake(clocks) {
+  const cont = clocks
+    .map((c) => {
+      const [h, m] = c.split(':').map(Number)
+      return { c, h, min: h + m / 60 }
+    })
+    // 睡眠帯のみ: 夕方(18-23) or 深夜〜午前(0-11)。日中(12-17)は除外。
+    .filter((x) => x.h >= 18 || x.h <= 11)
+    // 夕方はそのまま、午前は+24して連続軸に
+    .map((x) => ({ c: x.c, t: x.h < 18 ? x.min + 24 : x.min }))
+
+  if (cont.length < 2) return { bedtime: null, waketime: null }
+  const sorted = cont.sort((a, b) => a.t - b.t)
+  return { bedtime: sorted[0].c, waketime: sorted[sorted.length - 1].c }
 }
 
 // 画像ファイル(File/Blob/dataURL)をOCRしてパース結果を返す。
