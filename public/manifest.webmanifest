@@ -1,0 +1,18 @@
+{
+  "id": "/Claude-Code-app/",
+  "name": "ストリング管理くん",
+  "short_name": "ストリング管理",
+  "description": "バドミントンストリングのテンション・交換時期を管理するアプリ",
+  "start_url": "/Claude-Code-app/",
+  "scope": "/Claude-Code-app/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
+  "orientation": "portrait",
+  "lang": "ja",
+  "icons": [
+    { "src": "/Claude-Code-app/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/Claude-Code-app/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/Claude-Code-app/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

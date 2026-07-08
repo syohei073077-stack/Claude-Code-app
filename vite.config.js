@@ -22,36 +22,10 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icon.svg', 'icon-192.png', 'icon-512.png'],
-      manifest: {
-        name: 'ストリング管理くん',
-        short_name: 'ストリング管理くん',
-        description: 'バドミントンストリングのテンション・交換時期を管理するアプリ',
-        theme_color: '#2563eb',
-        background_color: '#f8fafc',
-        display: 'standalone',
-        orientation: 'portrait',
-        scope: '/Claude-Code-app/',
-        start_url: '/Claude-Code-app/',
-        lang: 'ja',
-        icons: [
-          {
-            src: 'icon-192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'icon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-          {
-            src: 'icon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
-          },
-        ],
-      },
+      // マニフェストはページごとに用意する（public/manifest.webmanifest =
+      // バドミントン, public/sleep.webmanifest = 睡眠分析）。各HTMLで個別にリンクし、
+      // それぞれ独立したPWAとしてホーム追加できるようにする。
+      manifest: false,
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         runtimeCaching: [
