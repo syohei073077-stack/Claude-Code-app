@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import { resolve } from 'node:path'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -6,6 +7,15 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig({
   // GitHub Pages のプロジェクトサイト（/Claude-Code-app/ 配下）で配信するためのベースパス
   base: '/Claude-Code-app/',
+  // バドミントン(index.html)と睡眠分析(sleep.html)を独立した別ページとしてビルド
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        sleep: resolve(__dirname, 'sleep.html'),
+      },
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),
